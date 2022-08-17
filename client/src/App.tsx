@@ -1,8 +1,14 @@
-import React from 'react';
-import './App.css';
+import Router from 'components/_routes/Router';
 
-function App() {
-  return <div></div>
-}
+import { useDarkMode } from 'hooks/useDarkMode';
+
+const App = () => {
+	useDarkMode();
+	return (
+		<div className="min-h-screen bg-gray-200 dark:bg-gray-400">
+			<Router />
+		</div>
+	);
+};
 
 export default App;
