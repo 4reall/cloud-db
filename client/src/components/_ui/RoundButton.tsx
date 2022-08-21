@@ -1,16 +1,22 @@
-import { PropsWithChildren } from 'react';
+import {
+	ButtonHTMLAttributes,
+	ComponentPropsWithoutRef,
+	HTMLAttributes,
+	HTMLProps,
+	PropsWithChildren,
+} from 'react';
 import clsx from 'clsx';
 import Ripple from 'components/Ripple/Ripple';
 
-interface ContentButtonProps {
-	onClick: () => void;
+interface ContentButtonProps extends ComponentPropsWithoutRef<'button'> {
 	size: 'sm' | 'md' | 'lg';
-	ripple: boolean;
-	className?: string;
+	ripple?: boolean;
 }
 
 const sizeMap = {
-	sm: '',
+	sm: 'h-8 w-8 p-1',
+	md: 'h-12 w-12 p-2',
+	lg: 'h-16 w-16 p-3',
 };
 
 const RoundButton = ({
@@ -19,12 +25,14 @@ const RoundButton = ({
 	size,
 	className,
 	ripple,
-}: PropsWithChildren<ContentButtonProps>) => {
+}: ContentButtonProps) => {
 	return (
 		<button
 			onClick={onClick}
 			className={clsx(
-				'relative h-12 w-12 overflow-hidden rounded-full p-3',
+				'relative overflow-hidden rounded-full duration-300',
+				'md:hover:text-gray-700 md:hover:dark:text-white',
+				sizeMap[size],
 				className
 			)}
 		>

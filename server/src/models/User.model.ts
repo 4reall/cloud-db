@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
-import { IUser, IUserModel } from "../types/IUser";
+import { IUser, IUserModel } from "../types/User";
 
-const userSchema = new Schema<IUser>({
+const UserSchema = new Schema<IUser>({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	usedSpace: { type: Number, required: true, default: 0 },
@@ -10,4 +10,4 @@ const userSchema = new Schema<IUser>({
 	files: [{ type: Types.ObjectId, ref: "File" }],
 });
 
-export const User = model<IUser, IUserModel>("Users", userSchema);
+export const User = model<IUser>("Users", UserSchema);

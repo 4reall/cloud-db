@@ -1,37 +1,96 @@
-import { Children, PropsWithChildren, ReactNode } from 'react';
-import { Menu } from '@headlessui/react';
+import {
+	Children,
+	ForwardedRef,
+	forwardRef,
+	HTMLAttributes,
+	PropsWithChildren,
+	ReactNode,
+	useState,
+} from 'react';
+import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 
-import MenuButton from 'components/_ui/Dropdown/MenuButton';
 import MenuItem from 'components/_ui/Dropdown/MenuItem';
+import IconButton from 'components/_ui/IconButton';
 
-interface DropdownMenuProps {
-	renderButton: ReactNode;
-}
+type DropdownMenuProps = PropsWithChildren<{
+	button?: {
+		icon: ReactNode;
+		label: string;
+		onClick: () => void;
+	};
+	isOpen: boolean;
+	align?: 'left' | 'right' | 'center';
+}> &
+	HTMLAttributes<HTMLDivElement>;
 
-const Dropdown = ({
-	children,
-	renderButton,
-}: PropsWithChildren<DropdownMenuProps>) => {
-	return (
-		<Menu>
-			<div className={clsx('relative z-30 inline-block')}>
-				<MenuButton>{renderButton}</MenuButton>
-				<Menu.Items
-					as="ul"
-					className={clsx(
-						'absolute left-0 z-20 mt-2 w-56 md:right-0 md:left-auto',
-						'rounded-md bg-gray-100 py-2 shadow-xl',
-						'dark:bg-gray-700'
-					)}
-				>
-					{Children.map(children, (child) => (
-						<MenuItem>{child}</MenuItem>
-					))}
-				</Menu.Items>
-			</div>
-		</Menu>
-	);
+const alignMap = {
+	left: 'left-0',
+	right: 'right-0',
+	center: 'left-1/2 -translate-x-1/2',
 };
+
+const Dropdown = forwardRef(
+	(
+		{
+			children,
+			button,
+			isOpen,
+			className,
+			align = 'left',
+			...props
+		}: DropdownMenuProps,
+		ref: ForwardedRef<HTMLDivElement>
+	) => {
+		return (
+			<Menu
+				ref={ref}
+				as="div"
+				className={clsx('relative z-30 inline-block', className)}
+				{...props}
+			>
+				{({ open }) => (
+					<>
+						{button && (
+							<IconButton
+								className={clsx(
+									'rounded-md text-black dark:text-gray-200'
+									// 'py-2 px-4'
+								)}
+								{...button}
+								full
+								ripple
+							/>
+						)}
+						<Transition
+							show={isOpen}
+							enter="transition duration-200 ease-out"
+							enterFrom="transform scale-95 opacity-0"
+							enterTo="transform scale-100 opacity-1"
+							leave="transition duration-150 ease-out"
+							leaveFrom="transform scale-100 opacity-1"
+							leaveTo="transform scale-95 opacity-0"
+						>
+							<Menu.Items
+								static
+								as="ul"
+								className={clsx(
+									'absolute z-20 w-56 rounded-md py-2',
+									'bg-gray-100 shadow-xl dark:bg-gray-700',
+									button && 'mt-2',
+									alignMap[align]
+								)}
+							>
+								{Children.map(children, (child) => (
+									<MenuItem>{child}</MenuItem>
+								))}
+							</Menu.Items>
+						</Transition>
+					</>
+				)}
+			</Menu>
+		);
+	}
+);
 
 export default Dropdown;

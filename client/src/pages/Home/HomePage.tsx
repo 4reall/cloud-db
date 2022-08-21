@@ -1,7 +1,13 @@
 import Page from 'components/_layout/Page';
+import Breadcrumbs from 'components/_ui/Breadcrumbs/Breadcrumbs';
 
 const HomePage = () => {
-	return <Page>home page</Page>;
+	return (
+		<Page>
+			{/*<Breadcrumbs />*/}
+			home page
+		</Page>
+	);
 };
 
 export default HomePage;

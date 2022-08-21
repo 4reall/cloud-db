@@ -1,19 +1,16 @@
-import { IFile } from "../types/IFile";
+import { Error } from "mongoose";
+import { IFile } from "../types/File";
 import { FILES_URL } from "../utils/constants/env";
 import fs from "fs";
 
 class FileService {
-	async createDir(file: IFile) {
-		const filePath = `${FILES_URL}/${file.user}/${file.path}`;
-		try {
-			if (!fs.existsSync(filePath)) {
-				fs.mkdirSync(filePath);
-				return "File has been created";
-			} else {
-				return new Error("File already exist");
-			}
-		} catch (e) {
-			throw new Error(`File error: ${e.message}`);
+	createDir(file: IFile) {
+		const filePath = `${FILES_URL}/${file.userId}/${file.path}`;
+		if (!fs.existsSync(filePath)) {
+			fs.mkdirSync(filePath);
+			return "Folder has been created";
+		} else {
+			throw new Error("Folder already exist");
 		}
 	}
 }

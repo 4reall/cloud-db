@@ -1,12 +1,14 @@
 import { useAuthUserQuery } from 'api/endpoints/auth.endpoints';
-import Progress from 'components/_loaders/Progress';
-import { useAppSelector } from 'hooks/useAppSelector';
+import Progress from 'components/_ui/Progress';
 import { Navigate, Outlet } from 'react-router-dom';
 import { PathsEnum } from 'utils/constants/paths';
+import { useAppSelector } from 'hooks/redux';
 
 const RequireUser = () => {
-	const { isLoading, isFetching, isSuccess } = useAuthUserQuery(null);
 	const isAuth = useAppSelector((state) => state.user.isAuth);
+	const { isLoading, isFetching, isSuccess } = useAuthUserQuery(null, {
+		skip: isAuth,
+	});
 
 	const token = localStorage.getItem('token');
 	const loading = isLoading || isFetching;

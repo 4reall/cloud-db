@@ -5,8 +5,8 @@ import FileService from "../services/File.service";
 import HashService from "../services/Hash.service";
 import { validationResult } from "express-validator";
 import JwtServices from "../services/Jwt.service";
-import { IBaseRequest } from "../types/IBaseRequest";
-import { IUserRequest } from "../types/IUserRequest";
+import { IBaseRequest } from "../types/BaseRequest";
+import { IUserRequest } from "../types/UserRequest";
 
 class AuthController {
 	async registerUser(req: IBaseRequest<IUserRequest>, res: Response) {
@@ -33,7 +33,7 @@ class AuthController {
 			const hashPassword = await HashService.hashPassword(password);
 			const user = new User({ email, password: hashPassword });
 			await user.save();
-			await FileService.createDir(new File({ user: user.id, name: "" }));
+			FileService.createDir(new File({ userId: user.id, name: "" }));
 
 			return res.json({ message: "User has been created" });
 		} catch (e) {
@@ -89,7 +89,7 @@ class AuthController {
 			return res.json({
 				token,
 				user: {
-					id: user.id,
+					_id: user.id,
 					email: user.email,
 					diskSpace: user.diskSpace,
 					usedSpace: user.usedSpace,

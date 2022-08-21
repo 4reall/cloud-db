@@ -1,5 +1,6 @@
 import React, { useState, MouseEvent } from 'react';
 import { useDebouncedRippleCleanUp } from './useDebouncedRippleCleanUp';
+import clsx from 'clsx';
 
 const DURATION = 1000;
 
@@ -42,7 +43,10 @@ const Ripple = () => {
 				rippleArray.map((ripple, index) => {
 					return (
 						<span
-							className={`absolute scale-0 animate-[ripple] rounded-full bg-white`}
+							className={clsx(
+								'absolute scale-0 animate-[ripple] rounded-full',
+								'bg-black dark:bg-white'
+							)}
 							key={'span' + index}
 							style={{
 								animationDuration: DURATION + 'ms',

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { IUser } from "../types/IUser";
+import { IUser } from "../types/User";
 import { JWT_KEY } from "../utils/constants/env";
 
 class JwtService {

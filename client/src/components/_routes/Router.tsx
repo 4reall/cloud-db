@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from 'pages/Home/HomePage';
 import { PathsEnum } from 'utils/constants/paths';
 import RequireUser from 'components/_routes/RequireUser';
-import MainPage from 'pages/Main/MainPage';
+import DiskPage from 'pages/Disk/DiskPage';
 import AuthPage from 'pages/Auth/Auth.page';
 import Layout from 'components/_layout/Layout';
 import Page404 from 'pages/Page404/Page404';
@@ -15,7 +15,7 @@ const Router = () => {
 				<Route index element={<HomePage />} />
 
 				<Route element={<RequireUser />}>
-					<Route path={PathsEnum.Disk} element={<MainPage />} />
+					<Route path={PathsEnum.Disk} element={<DiskPage />} />
 				</Route>
 				<Route element={<RequireUser />}>
 					<Route path={PathsEnum.Profile} element={<ProfilePage />} />

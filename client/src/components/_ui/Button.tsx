@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import clsx from 'clsx';
 
 import Ripple from 'components/Ripple/Ripple';
-import Spinner from 'components/_loaders/Spinner/Spinner';
+import Spinner from 'components/_ui/Spinner';
 
 interface ButtonProps {
 	big?: boolean;
@@ -41,6 +41,7 @@ const Button = ({
 					<Spinner
 						className="absolute left-[-23px] top-[2px]"
 						size="sm"
+						// color="black"
 					/>
 				)}
 			</span>

@@ -1,12 +1,20 @@
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-export const validateFetchError = (
-	error: SerializedError | FetchBaseQueryError | undefined
-): FetchBaseQueryError | null => {
-	if (!error) return null;
+export const isFetchBaseQueryError = (
+	error: unknown
+): error is FetchBaseQueryError => {
+	return typeof error === 'object' && error != null && 'status' in error;
+};
 
-	if ('status' in error) return error as FetchBaseQueryError;
-
-	return null;
+export const isErrorWithMessage = (
+	error: unknown
+): error is { data: { message: string } } => {
+	return (
+		isFetchBaseQueryError(error) &&
+		(error as any).data != null &&
+		typeof (error as any).data === 'object' &&
+		'message' in (error as any).data &&
+		typeof (error as any).data.message === 'string'
+	);
 };

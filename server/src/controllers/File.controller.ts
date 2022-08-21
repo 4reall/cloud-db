@@ -2,24 +2,29 @@ import { Response } from "express";
 
 import { File } from "../models/File.model";
 import FileService from "../services/File.service";
-import { IBaseRequest } from "../types/IBaseRequest";
-import { IFileQueries, IFileRequest } from "../types/IFileRequest";
+import { IBaseRequest } from "../types/BaseRequest";
+import { IFileQueries, FileRequest } from "../types/FileRequest";
 
 class FileController {
-	async createDir(req: IBaseRequest<IFileRequest>, res: Response) {
+	async createDir(req: IBaseRequest<FileRequest>, res: Response) {
 		try {
-			const { parent, type, name } = req.body;
+			const { parentId, type, name } = req.body;
 
-			const file = new File({ name, parent, type, user: req.user.id });
-			const parentFile = await File.findOne({ _id: parent });
+			const file = new File({
+				name,
+				type,
+				parentId,
+				userId: req.user.id,
+			});
+			const parentFile = await File.findOne({ _id: parentId });
 
 			if (!parentFile) {
 				file.path = name;
-				await FileService.createDir(file);
+				FileService.createDir(file);
 			} else {
 				file.path = `${parentFile.path}/${file.name}`;
-				await FileService.createDir(file);
-				parentFile.children.push(file._id);
+				FileService.createDir(file);
+				parentFile.childrenIds.push(file._id);
 				await parentFile.save();
 			}
 
@@ -27,24 +32,24 @@ class FileController {
 
 			return res.json(file);
 		} catch (e) {
-			console.log(e);
-			return res.status(400).json(e);
+			console.log(e.message);
+			return res.status(400).json({ message: e.message });
 		}
 	}
 
 	async getFiles(
-		req: IBaseRequest<IFileRequest, IFileQueries>,
+		req: IBaseRequest<FileRequest, IFileQueries>,
 		res: Response
 	) {
 		try {
 			const files = await File.find({
-				user: req.user.id,
-				parent: req.query.parent,
+				userId: req.user.id,
+				parentId: req.query.parentId,
 			});
 			return res.json(files);
 		} catch (e) {
 			console.log(e);
-			return res.status(500).json(e);
+			return res.status(500).json({ message: e.message });
 		}
 	}
 }
