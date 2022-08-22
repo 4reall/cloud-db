@@ -5,17 +5,10 @@ import { HomeIcon } from '@heroicons/react/outline';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import { IDir } from 'types/file/File';
-import DirItem from 'components/_ui/Breadcrumbs/DirItem';
-import LinkItem from 'components/_ui/Breadcrumbs/LinkItem';
-
-type BreadcrumbsProps = {
-	dirPath?: IDir[];
-	onClick?: (navigateTo: string) => void;
-};
 
 const Breadcrumbs = ({ children }: PropsWithChildren<{}>) => {
 	return (
-		<ul className="flex items-center p-2 text-lg text-black dark:text-gray-200 ">
+		<ul className="flex select-none items-center p-2 text-lg text-black dark:text-gray-200">
 			<li>
 				<Link
 					className="md:hover:text-blue-700 md:hover:dark:text-white"
@@ -27,7 +20,7 @@ const Breadcrumbs = ({ children }: PropsWithChildren<{}>) => {
 			{Children.map(children, (child, i) => (
 				<>
 					<ChevronRightIcon className="mx-4 h-6 w-6" />
-					<li className="flex items-center">
+					<li className="flex cursor-pointer items-center">
 						<span
 							className={clsx(
 								'relative md:hover:text-blue-700 md:hover:dark:text-white',

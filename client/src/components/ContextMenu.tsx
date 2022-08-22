@@ -9,6 +9,8 @@ import {
 	useState,
 } from 'react';
 import { useClickOutside } from 'hooks/useClickOutside';
+import Overlay from 'components/_layout/Overlay';
+import Portal from 'components/Portal';
 
 const ContextMenu = ({ children }: PropsWithChildren<{}>) => {
 	const [dropdown, setDropdown] = useState(false);
@@ -28,15 +30,20 @@ const ContextMenu = ({ children }: PropsWithChildren<{}>) => {
 
 	const handleToggle = (e: MouseEvent<HTMLDivElement>) => {
 		e.preventDefault();
+		console.log(123);
+		// e.stopPropagation();
 		const containerSize = e.currentTarget.getBoundingClientRect();
 		const innerSize = innerRef.current?.getBoundingClientRect();
 
-		if (!innerSize || e.target !== e.currentTarget) return;
+		if (e.target !== e.currentTarget) return;
 
-		const curX = e.clientX - containerSize.x - innerSize.width;
-		const curY = e.clientY - containerSize.y - innerSize.height;
+		// const curX = e.clientX - containerSize.x - innerSize.width;
+		// const curY = e.clientY  - innerSize.height;
 
-		setDropdown((state) => false);
+		const curX = e.clientX;
+		const curY = e.clientY;
+
+		setDropdown(false);
 		setTimeout(() => {
 			setDropdown(true);
 			setPos({ x: curX, y: curY });
@@ -56,16 +63,19 @@ const ContextMenu = ({ children }: PropsWithChildren<{}>) => {
 			onContextMenu={handleToggle}
 			className="absolute top-0 right-0 bottom-0 left-0 select-none"
 		>
-			<div
-				ref={innerRef}
-				className="absolute bg-black"
-				style={{ top: pos.y, left: pos.x }}
-				onClick={() => setDropdown(false)}
-			>
-				<Dropdown isOpen={dropdown} align={align}>
-					{children}
-				</Dropdown>
-			</div>
+			<Overlay isOpen={dropdown} backgroundOpacity={0}>
+				<div
+					ref={innerRef}
+					className="absolute bg-black"
+					style={{ top: pos.y, left: pos.x }}
+					onClick={() => setDropdown(false)}
+				>
+					<Dropdown isOpen={dropdown} align={align}>
+						{children}
+					</Dropdown>
+					{/*<Overlay isOpen={dropdown} backgroundOpacity={0} />*/}
+				</div>
+			</Overlay>
 		</div>
 	);
 };

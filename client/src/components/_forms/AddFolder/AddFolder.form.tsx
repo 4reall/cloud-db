@@ -20,7 +20,7 @@ const AddFolderForm = ({ big }: AddFolderFormProps) => {
 	const currentDir = useAppSelector((state) => state.file.currentDir);
 	const [createDir, result] = useCreateDirMutation();
 
-	const { error, isSuccess } = result;
+	const { error, isSuccess, isLoading } = result;
 
 	const errMsg = isErrorWithMessage(error) ? error.data.message : '';
 
@@ -40,7 +40,13 @@ const AddFolderForm = ({ big }: AddFolderFormProps) => {
 				customError={errMsg}
 				big={big}
 			/>
-			<Button className="mt-2" type="submit" big={big}>
+			<Button
+				className="mt-2"
+				type="submit"
+				big={big}
+				loading={isLoading}
+				disabled={isLoading}
+			>
 				add file
 			</Button>
 		</BaseForm>

@@ -1,10 +1,10 @@
-import Overlay, { OverlayProps } from 'components/_layout/Overlay';
-import { HTMLProps, PropsWithChildren, MouseEvent } from 'react';
+import Overlay from 'components/_layout/Overlay';
+import { PropsWithChildren, MouseEvent } from 'react';
 import { useAppSelector } from 'hooks/redux';
 import { useDispatch } from 'react-redux';
 import { toggleModal } from 'store/reducer/modal.slice';
 import RoundButton from 'components/_ui/RoundButton';
-import { LockClosedIcon, XIcon } from '@heroicons/react/outline';
+import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 
 interface IBaseModal {
@@ -14,7 +14,7 @@ interface IBaseModal {
 export type BaseModalProps = PropsWithChildren<IBaseModal>;
 
 const BaseModal = ({ children, className }: BaseModalProps) => {
-	const isOpen = useAppSelector((state) => state.modal.isOpen);
+	const isOpen = useAppSelector((state) => state.modal.isModal);
 	const dispatch = useDispatch();
 
 	const closeModal = (e: MouseEvent) => {

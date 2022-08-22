@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, HTMLAttributes, ReactNode } from 'react';
 import clsx from 'clsx';
 import Ripple from 'components/Ripple/Ripple';
 
@@ -9,7 +9,7 @@ interface IIconButton {
 	full?: boolean;
 }
 
-type IconButtonProps = IIconButton & HTMLAttributes<HTMLButtonElement>;
+type IconButtonProps = IIconButton & ComponentPropsWithoutRef<'button'>;
 
 const IconButton = ({
 	icon,

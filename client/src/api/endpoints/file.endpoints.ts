@@ -20,8 +20,10 @@ const fileEndpoints = injectEndpoints({
 			}),
 			invalidatesTags: ['File'],
 		}),
-		getFiles: build.query<IFile[], {}>({
-			query: () => `${BASE_URL}`,
+		getFiles: build.query<IFile[], string | undefined>({
+			// query: () => `${BASE_URL}`,
+			query: (parentId) =>
+				`${BASE_URL}${parentId ? `?parentId=${parentId}` : ''}`,
 			providesTags: ['File'],
 			transformResponse: (state: IFileResponse[]) => {
 				return state.map(
@@ -29,16 +31,15 @@ const fileEndpoints = injectEndpoints({
 				);
 			},
 		}),
-		getFile: build.query<IFile, string>({
-			query: (parentId) => `${BASE_URL}?parentId=${parentId}`,
-			providesTags: ['File'],
-			transformResponse: (state: IFileResponse) => {
-				const { childrenIds, parentId, ...props } = state;
-				return props;
-			},
-		}),
+		// getFile: build.query<IFile, string>({
+		// 	query: (parentId) => `${BASE_URL}?parentId=${parentId}`,
+		// 	providesTags: ['File'],
+		// 	transformResponse: (state: IFileResponse) => {
+		// 		const { childrenIds, parentId, ...props } = state;
+		// 		return props;
+		// 	},
+		// }),
 	}),
 });
 
-export const { useCreateDirMutation, useGetFileQuery, useLazyGetFilesQuery } =
-	fileEndpoints;
+export const { useCreateDirMutation, useGetFilesQuery } = fileEndpoints;

@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface ModalState {
-	isOpen: boolean;
+	isContext: boolean;
+	isModal: boolean;
 }
 
 const initialState: ModalState = {
-	isOpen: false,
+	isContext: false,
+	isModal: false,
 };
 
 const modalSlice = createSlice({
@@ -13,12 +15,15 @@ const modalSlice = createSlice({
 	initialState,
 	reducers: {
 		toggleModal: (state) => {
-			state.isOpen = !state.isOpen;
+			state.isModal = !state.isModal;
+		},
+		toggleContext: (state) => {
+			state.isContext = !state.isContext;
 		},
 	},
 });
 
 export const {
-	actions: { toggleModal },
+	actions: { toggleModal, toggleContext },
 	reducer: modalReducer,
 } = modalSlice;

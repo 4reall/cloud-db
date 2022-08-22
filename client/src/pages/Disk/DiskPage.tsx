@@ -4,62 +4,61 @@ import {
 	useGetFilesQuery,
 } from 'api/endpoints/file.endpoints';
 import Button from 'components/_ui/Button';
-import FileList from 'components/FileList';
-import { useEffect } from 'react';
-import Breadcrumbs from 'components/_ui/Breadcrumbs/Breadcrumbs';
+import FileList from 'components/FileList/FileList';
+import { useEffect, useRef } from 'react';
+import Breadcrumbs from 'components/_ui/Breadcrumbs';
 import Divider from 'components/_layout/Divider';
 import { useAppSelector } from 'hooks/redux';
 import IconButton from 'components/_ui/IconButton';
-import { FolderAddIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
-import Spinner from 'components/_ui/Spinner';
+import { FolderAddIcon, FolderRemoveIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
 import { toggleModal } from 'store/reducer/modal.slice';
 import AddFileModal from 'components/_modals/AddFile.modal';
-import useMediaQuery from 'hooks/useMediaQuery';
-import { queries } from 'utils/constants/queries';
 import {
-	popFromStack,
+	sliceStack,
 	pushToStack,
 	setCurrentDir,
+	clearStack,
 } from 'store/reducer/file.slice';
 import { IDir } from 'types/file/File';
+import ContextMenu from 'components/ContextMenu';
 
 const DiskPage = () => {
 	const { currentDir, dirStack } = useAppSelector((state) => state.file);
 	const userId = useAppSelector((state) => state.user.currentUser?.user._id);
 	const dispatch = useDispatch();
-	const { data, isLoading, isFetching } = useGetFileQuery(c);
+	const { data, isLoading, isFetching } = useGetFilesQuery(
+		currentDir?._id !== userId ? currentDir?._id : ''
+	);
 
 	const loading = isLoading || isFetching;
-	const isData = data && data.length > 0;
 
 	useEffect(() => {
 		const handleContext = (e: MouseEvent) => e.preventDefault();
 		document.addEventListener('contextmenu', handleContext);
 
+		dispatch(pushToStack({ _id: '', name: 'My drive' }));
+
 		return () => {
 			document.removeEventListener('contextmenu', handleContext);
+			dispatch(clearStack());
+			dispatch(setCurrentDir(null));
 		};
 	}, []);
 
-	useEffect(() => {
-		if (userId) {
-			dispatch(pushToStack({ _id: userId, name: 'My drive' }));
-			console.log(123);
-			// dispatch(pushToStack({ _id: userId, n }));
-		}
-	}, [userId]);
-
-	const openModal = () => {
+	const openModal = () => () => {
 		dispatch(toggleModal());
 	};
 
-	const handleMoveToFolder = (dir: IDir) => {
-		return () => {
-			dispatch(setCurrentDir(dir));
-			dispatch(popFromStack(dir._id));
-		};
+	const handleMoveToFolder = (dir: IDir) => () => {
+		dispatch(setCurrentDir(dir));
+		dispatch(sliceStack(dir._id));
+	};
+
+	const handleFolderClick = (dir: IDir) => () => {
+		console.log(dir);
+		dispatch(setCurrentDir(dir));
+		dispatch(pushToStack(dir));
 	};
 
 	return (
@@ -80,7 +79,7 @@ const DiskPage = () => {
 					))}
 				</Breadcrumbs>
 				<IconButton
-					onClick={openModal}
+					onClick={openModal()}
 					className="p-2"
 					icon={<FolderAddIcon />}
 					label="Add file"
@@ -88,21 +87,16 @@ const DiskPage = () => {
 				/>
 			</div>
 			<Divider className="my-2" align="horizontal" />
-			{loading ? (
-				<Spinner
-					size="xl"
-					className="mx-auto mt-4 border-black dark:border-gray-200"
+			{data && (
+				<FileList
+					handleFolderClick={handleFolderClick}
+					loading={loading}
+					files={data}
+					contextActions={{
+						handleFileRemove: () => () => {},
+						// handleAddToFolder: () => () => {},
+					}}
 				/>
-			) : isData ? (
-				<FileList files={data} />
-			) : (
-				<span
-					className={clsx(
-						'mx-auto mt-4 block w-fit text-3xl text-black dark:text-gray-200'
-					)}
-				>
-					There are not files here yet
-				</span>
 			)}
 			<AddFileModal />
 		</Page>

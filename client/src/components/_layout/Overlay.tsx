@@ -12,6 +12,7 @@ import Portal from 'components/Portal';
 export interface OverlayProps extends ComponentPropsWithoutRef<'div'> {
 	isOpen: boolean;
 	duration?: '200' | '300' | '500';
+	backgroundOpacity?: number;
 }
 
 const durationMap = {
@@ -25,9 +26,10 @@ const Overlay = ({
 	isOpen,
 	className,
 	duration = '300',
+	backgroundOpacity,
 	...props
 }: PropsWithChildren<OverlayProps>) => {
-	const [show, setShow] = useState(true);
+	const [show, setShow] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout>();
 
 	useEffect(() => {
@@ -45,6 +47,9 @@ const Overlay = ({
 			{show && (
 				<Portal>
 					<div
+						style={{
+							backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity})`,
+						}}
 						className={clsx(
 							'fixed top-0 left-0 bottom-0 right-0 bg-black',
 							isOpen
