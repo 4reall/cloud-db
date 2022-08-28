@@ -1,22 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
-import Button from 'components/_ui/Button';
+import Button from 'components/_ui/_buttons/Button';
+import { PathsEnum } from 'utils/constants/paths';
+import Page from 'components/_layout/Page';
 
 const Page404 = () => {
 	const navigate = useNavigate();
 	const handleBack = () => {
-		navigate(-1);
+		navigate(PathsEnum.Home, { replace: true });
 	};
 
 	return (
-		<main>
-			<section
-				className={clsx(
-					'flex h-screen w-screen items-center bg-gray-200 p-16 dark:text-gray-100',
-					'dark:bg-gray-700'
-				)}
-			>
+		<Page>
+			<section>
 				<div className="container mx-auto my-8 flex flex-col items-center justify-center px-5">
 					<div className="max-w-md text-center">
 						<h2 className="mb-8 text-9xl font-extrabold dark:text-blue-700">
@@ -33,7 +30,7 @@ const Page404 = () => {
 					</div>
 				</div>
 			</section>
-		</main>
+		</Page>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { ObjectId, Document, Model } from "mongoose";
 import { IFile } from "./File";
 
-export interface IUser extends Document {
+export interface IUser {
 	_id: ObjectId;
 	email: string;
 	password: string;
@@ -9,8 +9,4 @@ export interface IUser extends Document {
 	usedSpace: number;
 	avatar: string;
 	files: IFile[];
-}
-
-export interface IUserModel extends Model<IUser> {
-	save(user: string): string;
 }

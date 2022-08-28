@@ -1,29 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface ModalState {
-	isContext: boolean;
-	isModal: boolean;
+	isUploadFileModal: boolean;
+	isAddFolderModal: boolean;
 }
 
 const initialState: ModalState = {
-	isContext: false,
-	isModal: false,
+	isUploadFileModal: false,
+	isAddFolderModal: false,
 };
 
 const modalSlice = createSlice({
 	name: 'modal',
 	initialState,
 	reducers: {
-		toggleModal: (state) => {
-			state.isModal = !state.isModal;
+		toggleAddFolderModal: (state) => {
+			state.isAddFolderModal = !state.isAddFolderModal;
 		},
-		toggleContext: (state) => {
-			state.isContext = !state.isContext;
+		toggleUploadFileModal: (state) => {
+			state.isUploadFileModal = !state.isUploadFileModal;
 		},
 	},
 });
 
 export const {
-	actions: { toggleModal, toggleContext },
+	actions: { toggleAddFolderModal, toggleUploadFileModal },
 	reducer: modalReducer,
 } = modalSlice;

@@ -5,7 +5,7 @@ import { useDarkMode } from 'hooks/useDarkMode';
 const App = () => {
 	useDarkMode();
 	return (
-		<div className="min-h-screen bg-gray-200 dark:bg-gray-600">
+		<div className="flex min-h-screen flex-col bg-gray-200 dark:bg-gray-600">
 			<Router />
 		</div>
 	);

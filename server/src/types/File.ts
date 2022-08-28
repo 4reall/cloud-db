@@ -1,6 +1,6 @@
 import { ObjectId, Document, Model } from "mongoose";
 
-export interface IFile extends Document {
+export interface IFile {
 	_id: ObjectId;
 	name: string;
 	type: string;
@@ -11,8 +11,4 @@ export interface IFile extends Document {
 	userId: ObjectId;
 	parentId: ObjectId;
 	childrenIds: ObjectId[];
-}
-
-export interface IFileModel extends Model<IFile> {
-	save(file: string): string;
 }

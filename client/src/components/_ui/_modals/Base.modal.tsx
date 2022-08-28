@@ -2,24 +2,26 @@ import Overlay from 'components/_layout/Overlay';
 import { PropsWithChildren, MouseEvent } from 'react';
 import { useAppSelector } from 'hooks/redux';
 import { useDispatch } from 'react-redux';
-import { toggleModal } from 'store/reducer/modal.slice';
-import RoundButton from 'components/_ui/RoundButton';
+import { toggleAddFolderModal } from 'store/reducer/modal.slice';
+import RoundButton from 'components/_ui/_buttons/RoundButton';
 import { XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { RootState } from 'store/store';
 
 interface IBaseModal {
-	className?: string;
+	modal: keyof RootState['modal'];
+	toggleModal: () => void;
 }
 
 export type BaseModalProps = PropsWithChildren<IBaseModal>;
 
-const BaseModal = ({ children, className }: BaseModalProps) => {
-	const isOpen = useAppSelector((state) => state.modal.isModal);
+const BaseModal = ({ children, modal, toggleModal }: BaseModalProps) => {
+	const isOpen = useAppSelector((state) => state.modal[modal]);
 	const dispatch = useDispatch();
 
 	const closeModal = (e: MouseEvent) => {
 		if (e.target === e.currentTarget) {
-			dispatch(toggleModal());
+			toggleModal();
 		}
 	};
 
@@ -42,7 +44,7 @@ const BaseModal = ({ children, className }: BaseModalProps) => {
 							'md:hover:dark:bg-gray-200 md:hover:dark:bg-opacity-10',
 							'md:hover:bg-black md:hover:bg-opacity-10'
 						)}
-						onClick={() => dispatch(toggleModal())}
+						onClick={toggleModal}
 						size="sm"
 					>
 						<XIcon />

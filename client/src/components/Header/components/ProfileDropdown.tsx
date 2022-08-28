@@ -6,7 +6,7 @@ import {
 	UserCircleIcon,
 } from '@heroicons/react/outline';
 
-import IconButton from 'components/_ui/IconButton';
+import IconButton from 'components/_ui/_buttons/IconButton';
 import Dropdown from 'components/_ui/Dropdown/Dropdown';
 
 import { useAppDispatch } from 'hooks/redux';
@@ -18,23 +18,29 @@ import { log } from 'util';
 interface DropdownMenuProps {
 	isAuth: boolean;
 	left?: boolean;
+	isOpen: boolean;
+	handleToggle: () => void;
 }
 
 const ProfileDropdown = ({
 	isAuth,
 	left,
+	isOpen,
+	handleToggle,
+	children,
 }: PropsWithChildren<DropdownMenuProps>) => {
-	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	const containerRef = useRef(null);
 
-	useClickOutside(containerRef, () => setIsOpen(false));
+	useClickOutside(containerRef, () => isOpen && handleToggle());
 
 	const login = () => {
+		handleToggle();
 		navigate(PathsEnum.Auth, { replace: true });
 	};
 	const logout = () => {
+		handleToggle();
 		dispatch(removeUser());
 	};
 
@@ -45,10 +51,11 @@ const ProfileDropdown = ({
 			button={{
 				icon: <UserCircleIcon />,
 				label: 'account',
-				onClick: () => setIsOpen(!isOpen),
+				onClick: handleToggle,
 			}}
 			isOpen={isOpen}
 		>
+			{children}
 			{isAuth ? (
 				<IconButton
 					className={'py-3 px-5'}

@@ -1,28 +1,16 @@
 import { Transition } from '@headlessui/react';
 import { IDir, IFile } from 'types/file/File';
-import Spinner from 'components/_ui/Spinner';
+import Spinner from 'components/_ui/_loaders/Spinner';
 import Header from 'components/FileList/components/Header';
-import ContextMenu from 'components/ContextMenu';
-import IconButton from 'components/_ui/IconButton';
-import { FolderAddIcon, FolderRemoveIcon } from '@heroicons/react/outline';
 import File from 'components/FileList/components/File';
 
 interface FileListProps {
 	files: IFile[];
 	loading: boolean;
 	handleFolderClick: (dir: IDir) => () => void;
-	contextActions?: {
-		handleFileRemove: (dir: IDir) => () => void;
-		// handleAddToFolder: (dir: IDir) => () => void;
-	};
 }
 
-const FileList = ({
-	files,
-	loading,
-	handleFolderClick,
-	contextActions,
-}: FileListProps) => {
+const FileList = ({ files, loading, handleFolderClick }: FileListProps) => {
 	if (loading)
 		return (
 			<>
@@ -62,32 +50,15 @@ const FileList = ({
 				>
 					<File
 						file={file}
-						onClick={handleFolderClick({
-							_id: file._id,
-							name: file.name,
-						})}
-						// contextActions={contextActions}
+						onClick={
+							file.type === 'dir'
+								? handleFolderClick({
+										_id: file._id,
+										name: file.name,
+								  })
+								: undefined
+						}
 					/>
-					{contextActions && (
-						<ContextMenu>
-							<IconButton
-								icon={<FolderRemoveIcon />}
-								label="remove"
-								onClick={contextActions.handleFileRemove({
-									_id: file._id,
-									name: file.name,
-								})}
-							/>
-							<IconButton
-								icon={<FolderAddIcon />}
-								label="add"
-								onClick={contextMenu.handleAddToFolder({
-									_id: file._id,
-									name: file.name,
-								})}
-							/>
-						</ContextMenu>
-					)}
 				</Transition>
 			))}
 		</>

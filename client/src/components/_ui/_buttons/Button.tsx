@@ -9,7 +9,7 @@ import {
 import clsx from 'clsx';
 
 import Ripple from 'components/Ripple/Ripple';
-import Spinner from 'components/_ui/Spinner';
+import Spinner from 'components/_ui/_loaders/Spinner';
 import { useDebounce } from 'hooks/useTimeout';
 
 interface ButtonProps extends ComponentPropsWithoutRef<'button'> {

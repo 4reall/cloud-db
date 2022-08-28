@@ -11,7 +11,7 @@ import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 
 import MenuItem from 'components/_ui/Dropdown/MenuItem';
-import IconButton from 'components/_ui/IconButton';
+import IconButton from 'components/_ui/_buttons/IconButton';
 
 type DropdownMenuProps = PropsWithChildren<{
 	button?: {

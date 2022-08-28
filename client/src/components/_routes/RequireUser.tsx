@@ -1,5 +1,5 @@
 import { useAuthUserQuery } from 'api/endpoints/auth.endpoints';
-import Progress from 'components/_ui/Progress';
+import Progress from 'components/_ui/_loaders/Progress';
 import { Navigate, Outlet } from 'react-router-dom';
 import { PathsEnum } from 'utils/constants/paths';
 import { useAppSelector } from 'hooks/redux';

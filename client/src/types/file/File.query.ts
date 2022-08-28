@@ -1,5 +1,6 @@
+import { IFile } from 'types/file/File';
+
 export interface IFileQuery {
-	// type: string;
-	name: string;
-	parentId?: string;
+	name?: string;
+	parentId?: IFile['_id'];
 }

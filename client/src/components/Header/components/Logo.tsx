@@ -7,12 +7,12 @@ import { ReactComponent as MainLogo } from 'assets/icons/MainLogo.svg';
 
 const Logo = () => {
 	return (
-		<div className="text-xl font-semibold text-gray-700">
+		<div className="text-xl text-sm font-semibold  text-gray-700">
 			<Link
 				className={clsx(
-					'flex transform items-center text-2xl font-bold text-gray-800',
-					'transition-colors duration-200 md:hover:text-blue-700',
-					'dark:text-gray-200 dark:hover:text-white lg:text-3xl'
+					'flex transform items-center text-xl font-bold md:text-2xl lg:text-3xl',
+					'text-gray-800 transition-colors duration-200 md:hover:text-blue-700',
+					'dark:text-gray-200 dark:hover:text-white md:hover:text-blue-700'
 				)}
 				to={PathsEnum.Home}
 			>

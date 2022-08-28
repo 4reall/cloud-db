@@ -1,104 +1,96 @@
 import Page from 'components/_layout/Page';
 import {
-	useCreateDirMutation,
 	useGetFilesQuery,
+	useUploadFileMutation,
 } from 'api/endpoints/file.endpoints';
-import Button from 'components/_ui/Button';
 import FileList from 'components/FileList/FileList';
-import { useEffect, useRef } from 'react';
-import Breadcrumbs from 'components/_ui/Breadcrumbs';
+import { useEffect } from 'react';
 import Divider from 'components/_layout/Divider';
 import { useAppSelector } from 'hooks/redux';
-import IconButton from 'components/_ui/IconButton';
-import { FolderAddIcon, FolderRemoveIcon } from '@heroicons/react/outline';
 import { useDispatch } from 'react-redux';
-import { toggleModal } from 'store/reducer/modal.slice';
-import AddFileModal from 'components/_modals/AddFile.modal';
+import {
+	toggleAddFolderModal,
+	toggleUploadFileModal,
+} from 'store/reducer/modal.slice';
+import AddFolderModal from 'components/_ui/_modals/AddFolder.modal';
 import {
 	sliceStack,
 	pushToStack,
 	setCurrentDir,
 	clearStack,
+	popFromStack,
 } from 'store/reducer/file.slice';
 import { IDir } from 'types/file/File';
-import ContextMenu from 'components/ContextMenu';
+import useMediaQuery from 'hooks/useMediaQuery';
+import { queries } from 'utils/constants/queries';
+import Header from 'pages/Disk/components/Header';
+import UploadFileModal from 'components/_ui/_modals/UploadFile.modal';
 
 const DiskPage = () => {
+	const isMd = useMediaQuery(queries.up.md);
+
 	const { currentDir, dirStack } = useAppSelector((state) => state.file);
 	const userId = useAppSelector((state) => state.user.currentUser?.user._id);
 	const dispatch = useDispatch();
+
 	const { data, isLoading, isFetching } = useGetFilesQuery(
 		currentDir?._id !== userId ? currentDir?._id : ''
 	);
+	const [trigger] = useUploadFileMutation();
 
 	const loading = isLoading || isFetching;
 
 	useEffect(() => {
-		const handleContext = (e: MouseEvent) => e.preventDefault();
-		document.addEventListener('contextmenu', handleContext);
-
+		// set root folder name to breadcrumbs
 		dispatch(pushToStack({ _id: '', name: 'My drive' }));
 
 		return () => {
-			document.removeEventListener('contextmenu', handleContext);
 			dispatch(clearStack());
 			dispatch(setCurrentDir(null));
 		};
 	}, []);
 
-	const openModal = () => () => {
-		dispatch(toggleModal());
-	};
+	const openAddFolderModal = () => dispatch(toggleAddFolderModal());
+	const openUploadFileModal = () => dispatch(toggleUploadFileModal());
 
 	const handleMoveToFolder = (dir: IDir) => () => {
 		dispatch(setCurrentDir(dir));
 		dispatch(sliceStack(dir._id));
 	};
 
+	const handleBack = () => {
+		// if it is not the root folder, then pop folder for stack and set previous as current
+		if (dirStack.length > 1) {
+			dispatch(setCurrentDir(dirStack[dirStack.length - 2]));
+			dispatch(popFromStack());
+		}
+	};
+
 	const handleFolderClick = (dir: IDir) => () => {
-		console.log(dir);
 		dispatch(setCurrentDir(dir));
 		dispatch(pushToStack(dir));
 	};
 
 	return (
 		<Page>
-			<div className="flex flex-1 items-center justify-between">
-				<Breadcrumbs>
-					{dirStack.map((dir, i) => (
-						<span
-							key={dir._id}
-							onClick={
-								i !== dirStack.length - 1
-									? handleMoveToFolder(dir)
-									: undefined
-							}
-						>
-							{dir.name}
-						</span>
-					))}
-				</Breadcrumbs>
-				<IconButton
-					onClick={openModal()}
-					className="p-2"
-					icon={<FolderAddIcon />}
-					label="Add file"
-					ripple
-				/>
-			</div>
+			<Header
+				big={isMd}
+				dirStack={dirStack}
+				handleBack={handleBack}
+				handleMoveToFolder={handleMoveToFolder}
+				openAddFolderModal={openAddFolderModal}
+				openUploadFileModal={openUploadFileModal}
+			/>
 			<Divider className="my-2" align="horizontal" />
 			{data && (
 				<FileList
 					handleFolderClick={handleFolderClick}
 					loading={loading}
 					files={data}
-					contextActions={{
-						handleFileRemove: () => () => {},
-						// handleAddToFolder: () => () => {},
-					}}
 				/>
 			)}
-			<AddFileModal />
+			<UploadFileModal />
+			<AddFolderModal />
 		</Page>
 	);
 };

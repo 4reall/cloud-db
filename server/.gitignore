@@ -4,6 +4,7 @@
 .pnp.js
 .idea
 
+/files
 
 # testing
 /coverage

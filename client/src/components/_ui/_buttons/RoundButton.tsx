@@ -15,7 +15,7 @@ interface ContentButtonProps extends ComponentPropsWithoutRef<'button'> {
 
 const sizeMap = {
 	sm: 'h-8 w-8 p-1',
-	md: 'h-12 w-12 p-2',
+	md: 'h-12 w-12 p-[10px]',
 	lg: 'h-16 w-16 p-3',
 };
 

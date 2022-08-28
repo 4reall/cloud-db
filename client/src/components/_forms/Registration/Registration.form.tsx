@@ -2,8 +2,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 
-import Button from 'components/_ui/Button';
-import InputField from 'components/_forms/Input.field';
+import Button from 'components/_ui/_buttons/Button';
+import InputField from 'components/_forms/_fields/Input.field';
 
 import { useRegisterUserMutation } from 'api/endpoints/auth.endpoints';
 import { registrationSchema } from 'components/_forms/Registration/registration.validation';
@@ -18,6 +18,12 @@ export interface IRegistrationForm {
 	password: string;
 	confirmPassword: string;
 }
+
+const defaultValues: IRegistrationForm = {
+	email: '',
+	password: '',
+	confirmPassword: '',
+};
 
 interface RegistrationFormProps {
 	big?: boolean;
@@ -35,6 +41,7 @@ const RegistrationForm = ({ big }: RegistrationFormProps) => {
 		<BaseForm<IRegistrationForm>
 			onSubmit={onSubmit}
 			validationSchema={registrationSchema}
+			defaultValues={defaultValues}
 		>
 			<InputField<IRegistrationForm>
 				label="E-mail"
@@ -52,7 +59,7 @@ const RegistrationForm = ({ big }: RegistrationFormProps) => {
 				name="confirmPassword"
 				big={big}
 				type="password"
-				customError={errMsg}
+				errorMessage={errMsg}
 			/>
 			<Button
 				className={clsx('mt-6 w-full', big && 'mt-8')}

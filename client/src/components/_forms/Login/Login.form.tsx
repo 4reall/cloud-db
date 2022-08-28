@@ -4,19 +4,25 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 
-import Button from 'components/_ui/Button';
-import InputField from 'components/_forms/Input.field';
+import Button from 'components/_ui/_buttons/Button';
+import InputField from 'components/_forms/_fields/Input.field';
 
 import { useLoginUserMutation } from 'api/endpoints/auth.endpoints';
 import { loginValidation } from 'components/_forms/Login/login.validation';
 import { PathsEnum } from 'utils/constants/paths';
 import BaseForm from 'components/_forms/Base.form';
 import { isFetchBaseQueryError } from 'utils/helpers/validateError';
+import { IRegistrationForm } from 'components/_forms/Registration/Registration.form';
 
 export interface ILoginForm {
 	email: string;
 	password: string;
 }
+
+const defaultValues: ILoginForm = {
+	email: '',
+	password: '',
+};
 
 interface RegistrationFormProps {
 	big?: boolean;
@@ -46,6 +52,7 @@ const LoginForm = ({ big }: RegistrationFormProps) => {
 		<BaseForm<ILoginForm>
 			validationSchema={loginValidation}
 			onSubmit={onSubmit}
+			defaultValues={defaultValues}
 		>
 			<InputField<ILoginForm>
 				name="email"
@@ -58,7 +65,7 @@ const LoginForm = ({ big }: RegistrationFormProps) => {
 				label="Password"
 				big={big}
 				type="password"
-				customError={errMsg}
+				errorMessage={errMsg}
 			/>
 			<Button
 				className={clsx('mt-6 w-full', big && 'mt-8')}

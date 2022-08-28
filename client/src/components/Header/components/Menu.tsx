@@ -1,27 +1,30 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import Overlay from 'components/_layout/Overlay';
 import { Transition } from '@headlessui/react';
+import clsx from 'clsx';
+
+interface MenuProps {
+	isOpen: boolean;
+}
 
 const Menu = ({ isOpen, children }: PropsWithChildren<MenuProps>) => {
 	return (
 		<Transition
 			show={isOpen}
-			className="z-50 flex-1 overflow-hidden md:overflow-visible"
+			className={clsx('z-50 flex-1')}
 			enter="transition-all duration-300"
-			enterFrom="max-h-0"
-			enterTo="max-h-screen"
+			enterFrom="max-h-0 overflow-hidden"
+			enterTo="max-h-screen overflow-visible"
+			// afterEnter={() => setHidden(false)}
 			leave="transition-all duration-300"
-			leaveFrom="max-h-screen"
-			leaveTo="max-h-0"
+			leaveFrom="max-h-screen overflow-visible"
+			leaveTo="max-h-0 overflow-hidden"
+			// beforeLeave={() => setHidden(true)}
 		>
 			{children}
-			<Overlay className="md:hidden" isOpen={isOpen} />
+			<Overlay isOpen={isOpen} />
 		</Transition>
 	);
 };
-
-interface MenuProps {
-	isOpen: boolean;
-}
 
 export default Menu;

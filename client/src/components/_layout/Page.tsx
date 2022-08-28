@@ -9,7 +9,7 @@ interface PageProps {
 
 const Page = ({ className, children }: PropsWithChildren<PageProps>) => {
 	return (
-		<main className="pt-[80px]">
+		<main className="flex-1 pt-[80px]">
 			<Container className={clsx(className, 'p-8')}>{children}</Container>
 		</main>
 	);

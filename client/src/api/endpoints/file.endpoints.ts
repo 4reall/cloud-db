@@ -10,20 +10,26 @@ const fileEndpoints = injectEndpoints({
 	endpoints: (build) => ({
 		createDir: build.mutation<IFile, IFileQuery>({
 			query: ({ parentId, name }) => ({
-				url: `${BASE_URL}${parentId ? `?parentId=${parentId}` : ''}`,
+				url: BASE_URL,
 				method: 'POST',
 				body: {
 					name,
 					parentId: parentId ? parentId : undefined,
 					type: 'dir',
 				},
+				params: {
+					parentId: parentId ? parentId : undefined,
+				},
 			}),
 			invalidatesTags: ['File'],
 		}),
 		getFiles: build.query<IFile[], string | undefined>({
-			// query: () => `${BASE_URL}`,
-			query: (parentId) =>
-				`${BASE_URL}${parentId ? `?parentId=${parentId}` : ''}`,
+			query: (parentId) => ({
+				url: BASE_URL,
+				params: {
+					parentId: parentId ? parentId : undefined,
+				},
+			}),
 			providesTags: ['File'],
 			transformResponse: (state: IFileResponse[]) => {
 				return state.map(
@@ -31,15 +37,16 @@ const fileEndpoints = injectEndpoints({
 				);
 			},
 		}),
-		// getFile: build.query<IFile, string>({
-		// 	query: (parentId) => `${BASE_URL}?parentId=${parentId}`,
-		// 	providesTags: ['File'],
-		// 	transformResponse: (state: IFileResponse) => {
-		// 		const { childrenIds, parentId, ...props } = state;
-		// 		return props;
-		// 	},
-		// }),
+		uploadFile: build.mutation<IFile, FormData>({
+			query: (body) => ({
+				url: `${BASE_URL}/upload`,
+				method: 'POST',
+				body,
+			}),
+			invalidatesTags: ['File'],
+		}),
 	}),
 });
 
-export const { useCreateDirMutation, useGetFilesQuery } = fileEndpoints;
+export const { useCreateDirMutation, useGetFilesQuery, useUploadFileMutation } =
+	fileEndpoints;

@@ -8,19 +8,19 @@ import { IDir } from 'types/file/File';
 
 const Breadcrumbs = ({ children }: PropsWithChildren<{}>) => {
 	return (
-		<ul className="flex select-none items-center p-2 text-lg text-black dark:text-gray-200">
+		<ul className="flex select-none items-center overflow-hidden p-2 text-sm text-black dark:text-gray-200">
 			<li>
 				<Link
 					className="md:hover:text-blue-700 md:hover:dark:text-white"
 					to={PathsEnum.Home}
 				>
-					<HomeIcon className="h-6 w-6" />
+					<HomeIcon className="h-5 w-5" />
 				</Link>
 			</li>
 			{Children.map(children, (child, i) => (
 				<>
-					<ChevronRightIcon className="mx-4 h-6 w-6" />
-					<li className="flex cursor-pointer items-center">
+					<ChevronRightIcon className="mx-2 h-6 w-6" />
+					<li className="block flex cursor-pointer items-center">
 						<span
 							className={clsx(
 								'relative md:hover:text-blue-700 md:hover:dark:text-white',

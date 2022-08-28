@@ -1,12 +1,12 @@
 import { Types, Schema, model } from "mongoose";
-import { IFile, IFileModel } from "../types/File";
+import { IFile } from "../types/File";
 import { dateNow } from "../utils/helpers/dateNow";
 
 const FileSchema = new Schema<IFile>({
 	name: { type: String, required: true },
 	type: { type: String, required: true },
 	accessLink: { type: String },
-	size: { type: Number, default: 1 },
+	size: { type: Number, default: 0 },
 	path: { type: String, default: "" },
 	date: { type: String, default: dateNow() },
 	userId: { type: Types.ObjectId, ref: "User" },

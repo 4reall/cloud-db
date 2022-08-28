@@ -69,7 +69,7 @@ class AuthController {
 			return res.json({
 				token,
 				user: {
-					id: user.id,
+					id: user._id,
 					email: user.email,
 					diskSpace: user.diskSpace,
 					usedSpace: user.usedSpace,
@@ -82,7 +82,7 @@ class AuthController {
 
 	async authUser(req: Request, res: Response) {
 		try {
-			const user = await User.findOne({ _id: req.user.id });
+			const user = await User.findOne({ _id: req.user._id });
 
 			const token = JwtServices.createToken(user);
 

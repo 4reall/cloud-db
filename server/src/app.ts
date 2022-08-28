@@ -1,4 +1,5 @@
 import express from "express";
+import fileUpload from "express-fileupload";
 import mongoose from "mongoose";
 import { corsMiddleware } from "./middlewares/cors.middleware";
 import authRouter from "./routes/auth.routes";
@@ -8,6 +9,7 @@ import { PathsEnum } from "./utils/constants/paths";
 
 const app = express();
 
+app.use(fileUpload({}));
 app.use(corsMiddleware);
 app.use(express.json());
 

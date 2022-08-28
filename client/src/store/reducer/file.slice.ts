@@ -27,6 +27,9 @@ const fileSlice = createSlice({
 			);
 			state.dirStack = state.dirStack.splice(0, index + 1);
 		},
+		popFromStack: (state) => {
+			state.dirStack.pop();
+		},
 		clearStack: (state) => {
 			state.dirStack = [];
 		},
@@ -34,6 +37,12 @@ const fileSlice = createSlice({
 });
 
 export const {
-	actions: { setCurrentDir, clearStack, pushToStack, sliceStack },
+	actions: {
+		setCurrentDir,
+		clearStack,
+		pushToStack,
+		sliceStack,
+		popFromStack,
+	},
 	reducer: fileReducer,
 } = fileSlice;

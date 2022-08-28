@@ -4,7 +4,7 @@ import { JWT_KEY } from "../utils/constants/env";
 
 class JwtService {
 	createToken(user: IUser): string {
-		return jwt.sign({ id: user.id }, JWT_KEY, {
+		return jwt.sign({ _id: user._id }, JWT_KEY, {
 			expiresIn: "1h",
 		});
 	}

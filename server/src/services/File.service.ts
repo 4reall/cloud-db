@@ -1,11 +1,11 @@
 import { Error } from "mongoose";
 import { IFile } from "../types/File";
-import { FILES_URL } from "../utils/constants/env";
+import { FILES_PATH } from "../utils/constants/env";
 import fs from "fs";
 
 class FileService {
 	createDir(file: IFile) {
-		const filePath = `${FILES_URL}/${file.userId}/${file.path}`;
+		const filePath = `${FILES_PATH}/${file.userId}/${file.path}`;
 		if (!fs.existsSync(filePath)) {
 			fs.mkdirSync(filePath);
 			return "Folder has been created";

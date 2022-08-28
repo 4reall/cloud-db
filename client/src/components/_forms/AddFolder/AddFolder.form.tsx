@@ -1,15 +1,19 @@
 import BaseForm from 'components/_forms/Base.form';
-import InputField from 'components/_forms/Input.field';
-import Button from 'components/_ui/Button';
+import InputField from 'components/_forms/_fields/Input.field';
+import Button from 'components/_ui/_buttons/Button';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { useCreateDirMutation } from 'api/endpoints/file.endpoints';
-import { toggleModal } from 'store/reducer/modal.slice';
+import { toggleAddFolderModal } from 'store/reducer/modal.slice';
 import { isErrorWithMessage } from 'utils/helpers/validateError';
 import { useEffect } from 'react';
 
 interface IAddFolderForm {
 	name: string;
 }
+
+const defaultValues: IAddFolderForm = {
+	name: '',
+};
 
 interface AddFolderFormProps {
 	big?: boolean;
@@ -29,15 +33,18 @@ const AddFolderForm = ({ big }: AddFolderFormProps) => {
 	};
 
 	useEffect(() => {
-		if (isSuccess) dispatch(toggleModal());
+		if (isSuccess) dispatch(toggleAddFolderModal());
 	}, [isSuccess]);
 
 	return (
-		<BaseForm<IAddFolderForm> onSubmit={onSubmit}>
+		<BaseForm<IAddFolderForm>
+			onSubmit={onSubmit}
+			defaultValues={defaultValues}
+		>
 			<InputField<IAddFolderForm>
 				name="name"
 				label="Folder name"
-				customError={errMsg}
+				errorMessage={errMsg}
 				big={big}
 			/>
 			<Button
