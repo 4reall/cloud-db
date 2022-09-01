@@ -1,5 +1,6 @@
 import {
 	Children,
+	ComponentPropsWithoutRef,
 	ForwardedRef,
 	forwardRef,
 	HTMLAttributes,
@@ -13,16 +14,12 @@ import clsx from 'clsx';
 import MenuItem from 'components/_ui/Dropdown/MenuItem';
 import IconButton from 'components/_ui/_buttons/IconButton';
 
-type DropdownMenuProps = PropsWithChildren<{
-	button?: {
-		icon: ReactNode;
-		label: string;
-		onClick: () => void;
-	};
+interface DropdownMenuProps extends ComponentPropsWithoutRef<'div'> {
+	trigger: ReactNode;
 	isOpen: boolean;
 	align?: 'left' | 'right' | 'center';
-}> &
-	HTMLAttributes<HTMLDivElement>;
+	children: ReactNode | ReactNode[];
+}
 
 const alignMap = {
 	left: 'left-0',
@@ -30,38 +27,31 @@ const alignMap = {
 	center: 'left-1/2 -translate-x-1/2',
 };
 
-const Dropdown = forwardRef(
+const Dropdown = forwardRef<HTMLDivElement, DropdownMenuProps>(
 	(
 		{
 			children,
-			button,
+			trigger,
 			isOpen,
 			className,
+			color,
 			align = 'left',
 			...props
-		}: DropdownMenuProps,
-		ref: ForwardedRef<HTMLDivElement>
+		},
+		ref
 	) => {
+		const [zIndex, setZIndex] = useState(0);
 		return (
 			<Menu
 				ref={ref}
 				as="div"
-				className={clsx('relative z-30 inline-block', className)}
+				className={clsx('inline-block', className)}
 				{...props}
+				style={{ zIndex: zIndex }}
 			>
 				{({ open }) => (
 					<>
-						{button && (
-							<IconButton
-								className={clsx(
-									'rounded-md text-black dark:text-gray-200'
-									// 'py-2 px-4'
-								)}
-								{...button}
-								full
-								ripple
-							/>
-						)}
+						{trigger}
 						<Transition
 							show={isOpen}
 							enter="transition duration-200 ease-out"
@@ -70,19 +60,23 @@ const Dropdown = forwardRef(
 							leave="transition duration-150 ease-out"
 							leaveFrom="transform scale-100 opacity-1"
 							leaveTo="transform scale-95 opacity-0"
+							beforeEnter={() => setZIndex(1000)}
 						>
 							<Menu.Items
 								static
 								as="ul"
 								className={clsx(
-									'absolute z-20 w-56 rounded-md py-2',
-									'bg-gray-100 shadow-xl dark:bg-gray-700',
-									button && 'mt-2',
+									'absolute z-50 mt-2 w-56 rounded-md py-2 shadow-xl',
+									color,
 									alignMap[align]
 								)}
 							>
 								{Children.map(children, (child) => (
-									<MenuItem>{child}</MenuItem>
+									<Menu.Item as={'li'}>
+										<span className="block h-full w-full md:hover:backdrop-brightness-95 md:hover:dark:backdrop-brightness-110">
+											{child}
+										</span>
+									</Menu.Item>
 								))}
 							</Menu.Items>
 						</Transition>

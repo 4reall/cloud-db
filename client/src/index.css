@@ -28,12 +28,12 @@ body {
     }
 
     .base__color_hover {
-        @apply text-black dark:text-gray-200 md:hover:text-gray-700 md:hover:text-white
+        @apply md:hover:text-blue-700 md:hover:dark:text-white
     }
 
-    .dragover {
-        opacity: 0.7;
-        background: red;
+    .base__bg_hover {
+        @apply md:hover:backdrop-brightness-95 md:dark:hover:backdrop-brightness-110
     }
+
 }
 

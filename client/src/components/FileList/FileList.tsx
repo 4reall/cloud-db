@@ -3,11 +3,15 @@ import { IDir, IFile } from 'types/file/File';
 import Spinner from 'components/_ui/_loaders/Spinner';
 import Header from 'components/FileList/components/Header';
 import File from 'components/FileList/components/File';
+import { MouseEvent } from 'react';
+import FileDropdown from 'components/FileList/components/FileDropdown';
 
 interface FileListProps {
 	files: IFile[];
 	loading: boolean;
-	handleFolderClick: (dir: IDir) => () => void;
+	handleFolderClick: (e: MouseEvent<HTMLDivElement>, dir: IDir) => void;
+	// handleRemoveFile: () => void;
+	// handleDownload: () => void;
 }
 
 const FileList = ({ files, loading, handleFolderClick }: FileListProps) => {
@@ -50,15 +54,17 @@ const FileList = ({ files, loading, handleFolderClick }: FileListProps) => {
 				>
 					<File
 						file={file}
-						onClick={
-							file.type === 'dir'
-								? handleFolderClick({
-										_id: file._id,
-										name: file.name,
-								  })
-								: undefined
-						}
+						onClick={(e) => {
+							file.type === 'dir' &&
+								handleFolderClick(e, {
+									_id: file._id,
+									name: file.name,
+								});
+						}}
 					/>
+					<div className="absolute right-[2%] top-0 flex h-full items-center justify-center">
+						<FileDropdown fileType={file.type} />
+					</div>
 				</Transition>
 			))}
 		</>

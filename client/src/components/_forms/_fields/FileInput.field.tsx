@@ -53,15 +53,9 @@ const FileInputField = <TForm,>({
 		inputRef.current!.files = dt.files;
 	};
 
-	const handleDragEnter = (e: DragEvent<HTMLInputElement>) => {
-		// e.preventDefault();
-		setIsDragging(true);
-	};
-	const handleDragLeave = (e: DragEvent<HTMLInputElement>) => {
-		// e.preventDefault();
-		setIsDragging(false);
-		// inputRef.current!.files = e.dataTransfer.files;
-	};
+	const handleDragEnter = () => setIsDragging(true);
+
+	const handleDragLeave = () => setIsDragging(false);
 
 	useEffect(() => {
 		if (isSubmitting) {
@@ -80,6 +74,9 @@ const FileInputField = <TForm,>({
 						? 'border-blue-700 text-blue-700 dark:border-blue-500 dark:text-blue-500'
 						: 'base__color border-black dark:border-gray-200'
 				)}
+				onDragLeave={handleDragLeave}
+				onDragOver={handleDragEnter}
+				onDrop={handleDragLeave}
 			>
 				<span className="block text-center text-base font-bold uppercase opacity-50 md:text-xl">
 					Browse file to upload
@@ -89,10 +86,6 @@ const FileInputField = <TForm,>({
 					{...props}
 					onBlur={onBlur}
 					onChange={handleChange}
-					onDragEnter={handleDragEnter}
-					onDragLeave={handleDragLeave}
-					onDragOver={handleDragEnter}
-					onDrop={handleDragLeave}
 					ref={assignRefs(ref, inputRef)}
 					type="file"
 					className="absolute top-0 left-0 h-full w-full opacity-0"

@@ -22,13 +22,12 @@ const UploadFileForm = ({ big }: UploadFileFormProps) => {
 	const handleSubmit: SubmitHandler<IUploadFileFrom> = (data) => {
 		if (!data.files) return;
 
-		// Array.from(data.files).forEach((file) => {
-		// 	const formData = new FormData();
-		// 	if (parentId) formData.append('parentId', parentId);
-		// 	formData.append('file', file);
-		// 	trigger(formData);
-		// });
-		console.log(data);
+		Array.from(data.files).forEach((file) => {
+			const formData = new FormData();
+			if (parentId) formData.append('parentId', parentId);
+			formData.append('file', file);
+			trigger(formData);
+		});
 	};
 
 	return (

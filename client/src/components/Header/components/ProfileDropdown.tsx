@@ -48,14 +48,19 @@ const ProfileDropdown = ({
 		<Dropdown
 			ref={containerRef}
 			align={left ? 'left' : 'right'}
-			button={{
-				icon: <UserCircleIcon />,
-				label: 'account',
-				onClick: handleToggle,
-			}}
+			trigger={
+				<IconButton
+					className="rounded-md text-black dark:text-gray-200"
+					onClick={handleToggle}
+					label="account"
+					icon={<UserCircleIcon />}
+					full
+					ripple
+				/>
+			}
 			isOpen={isOpen}
+			color="bg-gray-100 dark:bg-gray-700"
 		>
-			{children}
 			{isAuth ? (
 				<IconButton
 					className={'py-3 px-5'}

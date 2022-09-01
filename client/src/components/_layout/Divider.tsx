@@ -25,7 +25,7 @@ const Divider = ({
 	...props
 }: DividerProps) => {
 	return (
-		<span
+		<div
 			style={{ borderColor: color, width, height }}
 			className={clsx(alignMap[align], className)}
 			{...props}

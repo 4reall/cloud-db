@@ -1,10 +1,7 @@
 import Page from 'components/_layout/Page';
-import {
-	useGetFilesQuery,
-	useUploadFileMutation,
-} from 'api/endpoints/file.endpoints';
+import { useGetFilesQuery } from 'api/endpoints/file.endpoints';
 import FileList from 'components/FileList/FileList';
-import { useEffect } from 'react';
+import { useEffect, MouseEvent } from 'react';
 import Divider from 'components/_layout/Divider';
 import { useAppSelector } from 'hooks/redux';
 import { useDispatch } from 'react-redux';
@@ -36,8 +33,6 @@ const DiskPage = () => {
 	const { data, isLoading, isFetching } = useGetFilesQuery(
 		currentDir?._id !== userId ? currentDir?._id : ''
 	);
-	const [trigger] = useUploadFileMutation();
-
 	const loading = isLoading || isFetching;
 
 	useEffect(() => {
@@ -53,7 +48,7 @@ const DiskPage = () => {
 	const openAddFolderModal = () => dispatch(toggleAddFolderModal());
 	const openUploadFileModal = () => dispatch(toggleUploadFileModal());
 
-	const handleMoveToFolder = (dir: IDir) => () => {
+	const handleMoveToFolder = (dir: IDir) => {
 		dispatch(setCurrentDir(dir));
 		dispatch(sliceStack(dir._id));
 	};
@@ -66,9 +61,11 @@ const DiskPage = () => {
 		}
 	};
 
-	const handleFolderClick = (dir: IDir) => () => {
+	const handleFolderClick = (e: MouseEvent<HTMLDivElement>, dir: IDir) => {
+		// if (e.target === e.currentTarget) {
 		dispatch(setCurrentDir(dir));
 		dispatch(pushToStack(dir));
+		// }
 	};
 
 	return (

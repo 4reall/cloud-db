@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface ModalState {
 	isUploadFileModal: boolean;
 	isAddFolderModal: boolean;
+	isContextMenu: boolean;
 }
 
 const initialState: ModalState = {
 	isUploadFileModal: false,
 	isAddFolderModal: false,
+	isContextMenu: false,
 };
 
 const modalSlice = createSlice({
@@ -20,10 +22,13 @@ const modalSlice = createSlice({
 		toggleUploadFileModal: (state) => {
 			state.isUploadFileModal = !state.isUploadFileModal;
 		},
+		toggleContextMenu: (state) => {
+			state.isUploadFileModal = !state.isUploadFileModal;
+		},
 	},
 });
 
 export const {
-	actions: { toggleAddFolderModal, toggleUploadFileModal },
+	actions: { toggleAddFolderModal, toggleUploadFileModal, toggleContextMenu },
 	reducer: modalReducer,
 } = modalSlice;

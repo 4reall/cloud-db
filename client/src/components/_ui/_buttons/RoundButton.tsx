@@ -31,7 +31,7 @@ const RoundButton = ({
 			onClick={onClick}
 			className={clsx(
 				'relative overflow-hidden rounded-full duration-300',
-				'md:hover:text-gray-700 md:hover:dark:text-white',
+				'base__color base__color_hover base__bg_hover',
 				sizeMap[size],
 				className
 			)}

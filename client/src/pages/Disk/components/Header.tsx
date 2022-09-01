@@ -6,12 +6,13 @@ import {
 	FolderAddIcon,
 } from '@heroicons/react/outline';
 import { IDir } from 'types/file/File';
+import { MouseEvent } from 'react';
 
 interface HeaderProps {
 	big: boolean;
 	dirStack: IDir[];
 	handleBack: () => void;
-	handleMoveToFolder: (dir: IDir) => () => void;
+	handleMoveToFolder: (dir: IDir) => void;
 	openAddFolderModal: () => void;
 	openUploadFileModal: () => void;
 }
@@ -31,12 +32,11 @@ const Header = ({
 					{dirStack.map((dir, i) => (
 						<span
 							key={dir._id}
-							onClick={
+							onClick={() => {
 								// do nothing if the last folder
-								i !== dirStack.length - 1
-									? handleMoveToFolder(dir)
-									: undefined
-							}
+								i !== dirStack.length - 1 &&
+									handleMoveToFolder(dir);
+							}}
 						>
 							{dir.name}
 						</span>

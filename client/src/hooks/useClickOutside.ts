@@ -11,10 +11,8 @@ export const useClickOutside = (ref: RefObject<any>, callback: () => void) => {
 	};
 	useEffect(() => {
 		document.addEventListener('click', handleClick);
-		document.addEventListener('contextmenu', handleClick);
 		return () => {
 			document.removeEventListener('click', handleClick);
-			document.removeEventListener('contextmenu', handleClick);
 		};
-	});
+	}, [ref, callback]);
 };
