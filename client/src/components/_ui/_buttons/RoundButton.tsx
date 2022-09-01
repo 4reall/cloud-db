@@ -21,20 +21,20 @@ const sizeMap = {
 
 const RoundButton = ({
 	children,
-	onClick,
 	size,
 	className,
 	ripple,
+	...props
 }: ContentButtonProps) => {
 	return (
 		<button
-			onClick={onClick}
 			className={clsx(
 				'relative overflow-hidden rounded-full duration-300',
 				'base__color base__color_hover base__bg_hover',
 				sizeMap[size],
 				className
 			)}
+			{...props}
 		>
 			{children}
 			{ripple && <Ripple />}

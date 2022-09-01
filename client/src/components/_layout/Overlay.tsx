@@ -36,9 +36,13 @@ const Overlay = ({
 		if (!timeoutRef.current) clearTimeout(timeoutRef.current);
 
 		if (!isOpen) {
-			timeoutRef.current = setTimeout(() => setShow(false), +duration);
+			timeoutRef.current = setTimeout(() => {
+				setShow(false);
+				// document.body.style.overflow = 'visible';
+			}, +duration);
 		} else {
 			setShow(true);
+			// document.body.style.overflow = 'hidden';
 		}
 	}, [isOpen]);
 
@@ -51,7 +55,7 @@ const Overlay = ({
 							backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity})`,
 						}}
 						className={clsx(
-							'fixed top-0 left-0 bottom-0 right-0 bg-black',
+							'fixed top-0 left-0 h-screen w-screen overflow-hidden bg-black ',
 							isOpen
 								? 'visible bg-opacity-50'
 								: 'invisible opacity-0',

@@ -7,22 +7,35 @@ import {
 	FolderRemoveIcon,
 } from '@heroicons/react/outline';
 import Dropdown from 'components/_ui/Dropdown/Dropdown';
-import { useState, MouseEvent, useRef } from 'react';
+import { useState, MouseEvent, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import RoundButton from 'components/_ui/_buttons/RoundButton';
 import { useClickOutside } from 'hooks/useClickOutside';
 import Overlay from 'components/_layout/Overlay';
+import {
+	useDeleteFileMutation,
+	useLazyDownloadFileQuery,
+} from 'api/endpoints/file.endpoints';
+import { IFile } from 'types/file/File';
 
 interface FileDropdownProps {
-	fileType: string;
+	file: IFile;
 }
 
-const FileDropdown = ({ fileType }: FileDropdownProps) => {
+const FileDropdown = ({ file }: FileDropdownProps) => {
+	const [deleteFile, data] = useDeleteFileMutation();
+	const [downloadFile, deleteResult] = useLazyDownloadFileQuery();
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
 	const handleToggle = () => {
 		setIsOpen(!isOpen);
+	};
+	const handleDelete = () => {
+		deleteFile({ _id: file._id });
+	};
+	const handleDownload = () => {
+		downloadFile({ _id: file._id, name: file.name });
 	};
 
 	useClickOutside(dropdownRef, () => setIsOpen(false));
@@ -47,8 +60,9 @@ const FileDropdown = ({ fileType }: FileDropdownProps) => {
 				ref={dropdownRef}
 			>
 				<IconButton
+					onClick={handleDelete}
 					icon={
-						fileType === 'dir' ? (
+						file.type === 'dir' ? (
 							<FolderRemoveIcon />
 						) : (
 							<DocumentRemoveIcon />
@@ -58,8 +72,9 @@ const FileDropdown = ({ fileType }: FileDropdownProps) => {
 					full
 				/>
 				<IconButton
+					onClick={handleDownload}
 					icon={
-						fileType === 'dir' ? (
+						file.type === 'dir' ? (
 							<FolderDownloadIcon />
 						) : (
 							<DocumentDownloadIcon />

@@ -22,7 +22,7 @@ class FileService {
 		const filePath = this.getFilePath(file);
 		console.log(filePath);
 
-		fs.rmSync(filePath);
+		fs.rmSync(filePath, { recursive: true });
 	}
 }
 

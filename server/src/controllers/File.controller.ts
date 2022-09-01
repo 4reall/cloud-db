@@ -130,7 +130,9 @@ class FileController {
 				_id: req.query._id,
 				userId: req.user._id,
 			});
-			const path = `${FILES_PATH}/${file.path}/${file.name}`;
+			const path = `${FILES_PATH}/${req.user._id}/${file.path}`;
+
+			console.log(path);
 
 			if (fs.existsSync(path)) {
 				return res.download(path, file.name);
@@ -145,7 +147,6 @@ class FileController {
 
 	async deleteFile(req: IBaseRequest<null, IFileQueries>, res: Response) {
 		try {
-			console.log(req.query._id, req.user._id);
 			const file = await File.findOne({
 				_id: req.query._id,
 				userId: req.user._id,

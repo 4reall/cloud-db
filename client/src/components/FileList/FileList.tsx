@@ -63,7 +63,7 @@ const FileList = ({ files, loading, handleFolderClick }: FileListProps) => {
 						}}
 					/>
 					<div className="absolute right-[2%] top-0 flex h-full items-center justify-center">
-						<FileDropdown fileType={file.type} />
+						<FileDropdown file={file} />
 					</div>
 				</Transition>
 			))}

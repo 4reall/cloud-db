@@ -45,8 +45,50 @@ const fileEndpoints = injectEndpoints({
 			}),
 			invalidatesTags: ['File'],
 		}),
+		deleteFile: build.mutation<IFile, IFileQuery>({
+			query: ({ _id }) => ({
+				url: BASE_URL,
+				method: 'DELETE',
+				params: {
+					_id,
+				},
+			}),
+			invalidatesTags: ['File'],
+		}),
+		downloadFile: build.query<null, Required<Omit<IFileQuery, 'parentId'>>>(
+			{
+				queryFn: async (
+					{ _id, name },
+					api,
+					extraOptions,
+					baseQuery
+				) => {
+					const result = await baseQuery({
+						url: `${BASE_URL}/download`,
+						params: {
+							_id,
+						},
+						responseHandler: (response) => response.blob(),
+					});
+					const hiddenElement = document.createElement('a');
+					const url = window.URL || window.webkitURL;
+					hiddenElement.href = url.createObjectURL(
+						result.data as Blob
+					);
+					hiddenElement.target = '_blank';
+					hiddenElement.download = name;
+					hiddenElement.click();
+					return { data: null };
+				},
+			}
+		),
 	}),
 });
 
-export const { useCreateDirMutation, useGetFilesQuery, useUploadFileMutation } =
-	fileEndpoints;
+export const {
+	useCreateDirMutation,
+	useGetFilesQuery,
+	useUploadFileMutation,
+	useDeleteFileMutation,
+	useLazyDownloadFileQuery,
+} = fileEndpoints;

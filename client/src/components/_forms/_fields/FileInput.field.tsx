@@ -7,6 +7,7 @@ import ValidationError from 'components/_layout/ValidationError';
 import RoundButton from 'components/_ui/_buttons/RoundButton';
 import prettyBytes from 'pretty-bytes';
 import File from 'components/FileList/components/File';
+import Spinner from 'components/_ui/_loaders/Spinner';
 
 interface FileInputFieldProps<TForm> {
 	name: FieldPath<TForm>;
@@ -35,7 +36,6 @@ const FileInputField = <TForm,>({
 	} = useController({ name, control });
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		console.log(123);
 		const files = e.target.files;
 		if (!files) return;
 		setVal(Object.values(files));
@@ -46,8 +46,10 @@ const FileInputField = <TForm,>({
 		const newList = [...val];
 		const dt = new DataTransfer();
 
-		newList.splice(val.indexOf(file), 1);
+		newList.splice(newList.indexOf(file), 1);
 		newList.forEach((val) => dt.items.add(val));
+
+		console.log(newList);
 
 		setVal(newList);
 		inputRef.current!.files = dt.files;
@@ -81,7 +83,14 @@ const FileInputField = <TForm,>({
 				<span className="block text-center text-base font-bold uppercase opacity-50 md:text-xl">
 					Browse file to upload
 				</span>
-				<CloudUploadIcon className="mx-auto mt-4 h-16 w-16 md:h-24 md:w-24" />
+				{isSubmitting ? (
+					<Spinner
+						size="2xl"
+						className="mx-auto mt-4 border-blue-700 dark:border-gray-200"
+					/>
+				) : (
+					<CloudUploadIcon className="mx-auto mt-4 h-16 w-16 md:h-24 md:w-24" />
+				)}
 				<input
 					{...props}
 					onBlur={onBlur}
@@ -91,21 +100,23 @@ const FileInputField = <TForm,>({
 					className="absolute top-0 left-0 h-full w-full opacity-0"
 				/>
 			</div>
-			{val.map((file) => (
-				<div className="text-bases flex w-full items-center justify-between px-4 py-2 md:text-lg">
-					<div className="flex flex-col">
-						<span className="">{file.name}</span>
-						<span>{prettyBytes(file.size)}</span>
+			<div className="my-4 max-h-48 overflow-y-scroll">
+				{val.map((file) => (
+					<div className="text-bases flex w-full items-center justify-between px-4 py-2 md:text-lg">
+						<div className="flex flex-col">
+							<span className="">{file.name}</span>
+							<span>{prettyBytes(file.size)}</span>
+						</div>
+						<RoundButton
+							size={big ? 'md' : 'sm'}
+							type="button"
+							onClick={removeFile(file)}
+						>
+							<DocumentRemoveIcon className="text-red-600 md:hover:text-red-500" />
+						</RoundButton>
 					</div>
-					<RoundButton
-						size={big ? 'md' : 'sm'}
-						type="button"
-						onClick={removeFile(file)}
-					>
-						<DocumentRemoveIcon className="text-red-600 md:hover:text-red-500" />
-					</RoundButton>
-				</div>
-			))}
+				))}
+			</div>
 			<ValidationError />
 		</>
 	);
