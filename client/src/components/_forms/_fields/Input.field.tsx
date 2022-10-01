@@ -47,7 +47,10 @@ const InputField = <IForm,>({
 				full
 			/>
 			{validation && (
-				<ValidationError message={errorMessage || error} big={big} />
+				<ValidationError
+					message={errorMessage || error}
+					size={big ? 'md' : 'sm'}
+				/>
 			)}
 		</>
 	);

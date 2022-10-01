@@ -1,5 +1,3 @@
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 
 import Button from 'components/_ui/_buttons/Button';
@@ -8,10 +6,7 @@ import InputField from 'components/_forms/_fields/Input.field';
 import { useRegisterUserMutation } from 'api/endpoints/auth.endpoints';
 import { registrationSchema } from 'components/_forms/Registration/registration.validation';
 import BaseForm from 'components/_forms/Base.form';
-import {
-	isErrorWithMessage,
-	isFetchBaseQueryError,
-} from 'utils/helpers/validateError';
+import { isErrorWithMessage } from 'utils/helpers/validateError';
 
 export interface IRegistrationForm {
 	email: string;
@@ -30,7 +25,7 @@ interface RegistrationFormProps {
 }
 
 const RegistrationForm = ({ big }: RegistrationFormProps) => {
-	const [registerUser, { error, isError }] = useRegisterUserMutation();
+	const [registerUser, { error }] = useRegisterUserMutation();
 
 	const errMsg = isErrorWithMessage(error) ? error.data.message : '';
 

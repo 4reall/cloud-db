@@ -61,7 +61,8 @@ const FileInputField = <TForm,>({
 			resetField(name);
 			setFiles([]);
 		}
-	}, [isSubmitting]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isSubmitting, name]);
 
 	return (
 		<>
@@ -108,7 +109,10 @@ const FileInputField = <TForm,>({
 				))}
 			</div>
 			{errorMessage && (
-				<ValidationError big={big} message={errorMessage} />
+				<ValidationError
+					size={big ? 'md' : 'sm'}
+					message={errorMessage}
+				/>
 			)}
 		</>
 	);

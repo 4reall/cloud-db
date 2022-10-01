@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import validationError from 'components/_layout/ValidationError';
 import { HTMLAttributes } from 'react';
 
 const alignMap = {
