@@ -1,7 +1,7 @@
 import useMediaQuery from 'hooks/useMediaQuery';
 import { queries } from 'utils/constants/queries';
 import BaseModal from 'components/_ui/_modals/Base.modal';
-import UploadFileForm from 'components/_forms/UploadFile/UploadFile.form';
+import UploadForm from 'components/_forms/Upload/Upload.form';
 import { useAppDispatch } from 'hooks/redux';
 import { toggleUploadFileModal } from 'store/reducer/modal.slice';
 
@@ -15,7 +15,7 @@ const UploadFileModal = () => {
 
 	return (
 		<BaseModal toggleModal={handleToggle} modal="isUploadFileModal">
-			<UploadFileForm big={isMd} />
+			<UploadForm big={isMd} />
 		</BaseModal>
 	);
 };

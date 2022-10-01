@@ -8,6 +8,7 @@ import {
 } from 'react';
 import clsx from 'clsx';
 import Portal from 'components/Portal';
+import { Transition } from '@headlessui/react';
 
 export interface OverlayProps extends ComponentPropsWithoutRef<'div'> {
 	isOpen: boolean;
@@ -30,42 +31,46 @@ const Overlay = ({
 	...props
 }: PropsWithChildren<OverlayProps>) => {
 	const [show, setShow] = useState(false);
-	const timeoutRef = useRef<NodeJS.Timeout>();
 
 	useEffect(() => {
-		if (!timeoutRef.current) clearTimeout(timeoutRef.current);
+		let timeout: NodeJS.Timeout;
 
 		if (!isOpen) {
-			timeoutRef.current = setTimeout(() => {
-				setShow(false);
-				// document.body.style.overflow = 'visible';
-			}, +duration);
+			timeout = setTimeout(() => setShow(false), +duration);
+			document.body.removeAttribute('style');
 		} else {
+			document.body.style.overflow = 'hidden';
 			setShow(true);
-			// document.body.style.overflow = 'hidden';
 		}
+
+		return () => clearTimeout(timeout);
 	}, [isOpen]);
 
 	return (
 		<>
-			{show && (
+			{(isOpen || show) && (
 				<Portal>
-					<div
+					<Transition
+						show={show && isOpen}
+						// appear
+						enter="transition ease-out"
+						enterFrom="opacity-0"
+						enterTo="opacity-1"
+						leave="transition ease-out"
+						leaveFrom="opacity-1"
+						leaveTo="opacity-0"
 						style={{
 							backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity})`,
 						}}
 						className={clsx(
-							'fixed top-0 left-0 h-screen w-screen overflow-hidden bg-black ',
-							isOpen
-								? 'visible bg-opacity-50'
-								: 'invisible opacity-0',
-							className ? className : 'z-10',
-							duration && durationMap[duration]
+							'fixed left-0 top-0 h-screen w-screen select-none bg-black bg-opacity-50',
+							className,
+							durationMap[duration]
 						)}
 						{...props}
 					>
 						{children}
-					</div>
+					</Transition>
 				</Portal>
 			)}
 		</>

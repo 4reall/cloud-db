@@ -5,7 +5,7 @@ import { corsMiddleware } from "./middlewares/cors.middleware";
 import authRouter from "./routes/auth.routes";
 import filesRouter from "./routes/files.routes";
 import { PORT, DB_URL } from "./utils/constants/env";
-import { PathsEnum } from "./utils/constants/paths";
+import { PathsEnum } from "./utils/constants/Paths";
 
 const app = express();
 

@@ -3,7 +3,7 @@ import Menu from 'components/Header/components/Menu';
 import { ILink } from 'types/Link';
 import Burger from 'components/_ui/_buttons/Burger';
 import RoundButton from 'components/_ui/_buttons/RoundButton';
-import Container from 'components/Container';
+import Container from 'components/_layout/Container';
 import Logo from 'components/Header/components/Logo';
 import NavLinks from 'components/Header/components/NavLinks';
 import DarkModeSwitcher from 'components/DarkModeSwitcher';

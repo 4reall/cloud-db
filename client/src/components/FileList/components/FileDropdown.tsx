@@ -11,7 +11,6 @@ import { useState, MouseEvent, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import RoundButton from 'components/_ui/_buttons/RoundButton';
 import { useClickOutside } from 'hooks/useClickOutside';
-import Overlay from 'components/_layout/Overlay';
 import {
 	useDeleteFileMutation,
 	useLazyDownloadFileQuery,
@@ -28,6 +27,8 @@ const FileDropdown = ({ file }: FileDropdownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
+	const isDir = file.type === 'dir';
+
 	const handleToggle = () => {
 		setIsOpen(!isOpen);
 	};
@@ -35,56 +36,44 @@ const FileDropdown = ({ file }: FileDropdownProps) => {
 		deleteFile({ _id: file._id });
 	};
 	const handleDownload = () => {
-		downloadFile({ _id: file._id, name: file.name });
+		if (file.type !== 'dir')
+			downloadFile({ _id: file._id, name: file.name });
 	};
 
 	useClickOutside(dropdownRef, () => setIsOpen(false));
 
 	return (
-		<>
-			<Overlay isOpen={isOpen} backgroundOpacity={0} />
-			<Dropdown
-				trigger={
-					<RoundButton
-						className="ml-auto block"
-						size="sm"
-						onClick={handleToggle}
-					>
-						<DotsVerticalIcon className="h-full w-full" />
-					</RoundButton>
-				}
-				className="z-10"
-				color="bg-gray-100 dark:bg-gray-500"
-				isOpen={isOpen}
-				align="right"
-				ref={dropdownRef}
-			>
-				<IconButton
-					onClick={handleDelete}
-					icon={
-						file.type === 'dir' ? (
-							<FolderRemoveIcon />
-						) : (
-							<DocumentRemoveIcon />
-						)
-					}
-					label="remove"
-					full
-				/>
-				<IconButton
-					onClick={handleDownload}
-					icon={
-						file.type === 'dir' ? (
-							<FolderDownloadIcon />
-						) : (
-							<DocumentDownloadIcon />
-						)
-					}
-					label="download"
-					full
-				/>
-			</Dropdown>
-		</>
+		<Dropdown
+			trigger={
+				<RoundButton
+					className="ml-auto block"
+					size="sm"
+					onClick={handleToggle}
+					ripple
+				>
+					<DotsVerticalIcon className="h-full w-full" />
+				</RoundButton>
+			}
+			className="z-10"
+			color="bg-gray-100 dark:bg-gray-500"
+			isOpen={isOpen}
+			align="right"
+			ref={dropdownRef}
+		>
+			<IconButton
+				onClick={handleDelete}
+				icon={isDir ? <FolderRemoveIcon /> : <DocumentRemoveIcon />}
+				label="remove"
+				full
+			/>
+			<IconButton
+				onClick={handleDownload}
+				className={clsx(isDir && 'hidden')}
+				icon={isDir ? <FolderDownloadIcon /> : <DocumentDownloadIcon />}
+				label="download"
+				full
+			/>
+		</Dropdown>
 	);
 };
 

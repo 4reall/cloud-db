@@ -1,6 +1,7 @@
 import {
 	ButtonHTMLAttributes,
 	ComponentPropsWithoutRef,
+	forwardRef,
 	HTMLAttributes,
 	HTMLProps,
 	PropsWithChildren,
@@ -19,27 +20,24 @@ const sizeMap = {
 	lg: 'h-16 w-16 p-3',
 };
 
-const RoundButton = ({
-	children,
-	size,
-	className,
-	ripple,
-	...props
-}: ContentButtonProps) => {
-	return (
-		<button
-			className={clsx(
-				'relative overflow-hidden rounded-full duration-300',
-				'base__color base__color_hover base__bg_hover',
-				sizeMap[size],
-				className
-			)}
-			{...props}
-		>
-			{children}
-			{ripple && <Ripple />}
-		</button>
-	);
-};
+const RoundButton = forwardRef<HTMLButtonElement, ContentButtonProps>(
+	({ children, size, className, ripple, ...props }, ref) => {
+		return (
+			<button
+				ref={ref}
+				className={clsx(
+					'relative overflow-hidden rounded-full duration-300',
+					'base__color base__color_hover base__bg_hover',
+					sizeMap[size],
+					className
+				)}
+				{...props}
+			>
+				{children}
+				{ripple && <Ripple />}
+			</button>
+		);
+	}
+);
 
 export default RoundButton;

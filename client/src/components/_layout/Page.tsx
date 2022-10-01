@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 
-import Container from 'components/Container';
+import Container from 'components/_layout/Container';
 
 interface PageProps {
 	className?: string;

@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { IDir, IFile } from 'types/file/File';
-import Spinner from 'components/_ui/_loaders/Spinner';
+import Spinner from 'components/_ui/Spinner';
 import Header from 'components/FileList/components/Header';
 import File from 'components/FileList/components/File';
 import { MouseEvent } from 'react';
@@ -44,12 +44,9 @@ const FileList = ({ files, loading, handleFolderClick }: FileListProps) => {
 					key={file._id}
 					className="relative mb-4 last:mb-0"
 					appear
-					enter="transition-opacity duration-200"
-					enterFrom="opacity-0"
+					enter="transition-all duration-200"
+					enterFrom="opacity-0 scale-50"
 					enterTo="opacity-100"
-					leave="transition-opacity duration-300"
-					leaveFrom="opacity-100"
-					leaveTo="opacity-0"
 					show
 				>
 					<File

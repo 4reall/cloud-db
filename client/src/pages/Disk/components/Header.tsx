@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/outline';
 import { IDir } from 'types/file/File';
 import { MouseEvent } from 'react';
+import AddingDropdown from 'pages/Disk/components/AddingDropdown';
 
 interface HeaderProps {
 	big: boolean;
@@ -52,13 +53,14 @@ const Header = ({
 					ripple
 				/>
 			)}
-			<div className="flex flex-col md:flex-row md:items-center md:justify-between">
+			<AddingDropdown>
 				<IconButton
 					onClick={openAddFolderModal}
 					className="flex-shrink-0 p-2 text-sm md:text-base"
 					icon={<FolderAddIcon />}
 					label="Add folder"
 					ripple
+					full
 				/>
 				<IconButton
 					onClick={openUploadFileModal}
@@ -66,8 +68,9 @@ const Header = ({
 					icon={<DocumentAddIcon />}
 					label="Add file"
 					ripple
+					full
 				/>
-			</div>
+			</AddingDropdown>
 		</div>
 	);
 };

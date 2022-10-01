@@ -61,6 +61,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownMenuProps>(
 							leaveFrom="transform scale-100 opacity-1"
 							leaveTo="transform scale-95 opacity-0"
 							beforeEnter={() => setZIndex(1000)}
+							afterLeave={() => setZIndex(0)}
 						>
 							<Menu.Items
 								static
@@ -72,10 +73,16 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownMenuProps>(
 								)}
 							>
 								{Children.map(children, (child) => (
-									<Menu.Item as={'li'}>
-										<span className="block h-full w-full md:hover:backdrop-brightness-95 md:hover:dark:backdrop-brightness-110">
-											{child}
-										</span>
+									<Menu.Item
+										as={'li'}
+										className={clsx(
+											'block h-full w-full text-sm duration-200 md:text-base',
+											'md:hover:backdrop-brightness-95 md:hover:dark:backdrop-brightness-110'
+										)}
+									>
+										{/*<span className="block h-full w-full md:hover:backdrop-brightness-95 md:hover:dark:backdrop-brightness-110">*/}
+										{child}
+										{/*</span>*/}
 									</Menu.Item>
 								))}
 							</Menu.Items>

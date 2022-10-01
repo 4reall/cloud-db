@@ -2,8 +2,10 @@ import BaseForm from 'components/_forms/Base.form';
 import Button from 'components/_ui/_buttons/Button';
 import { useUploadFileMutation } from 'api/endpoints/file.endpoints';
 import { SubmitHandler } from 'react-hook-form';
-import FileInputField from 'components/_forms/_fields/FileInput.field';
+import FileInputField from 'components/_forms/_fields/FileInput/FileInput.field';
 import { useAppSelector } from 'hooks/redux';
+import { isErrorWithMessage } from 'utils/helpers/validateError';
+import { log } from 'util';
 
 interface IUploadFileFrom {
 	files: File[];
@@ -13,7 +15,7 @@ interface UploadFileFormProps {
 	big?: boolean;
 }
 
-const UploadFileForm = ({ big }: UploadFileFormProps) => {
+const UploadForm = ({ big }: UploadFileFormProps) => {
 	const [trigger, result] = useUploadFileMutation();
 	const parentId = useAppSelector((state) => state.file.currentDir?._id);
 
@@ -37,10 +39,15 @@ const UploadFileForm = ({ big }: UploadFileFormProps) => {
 				multiple={true}
 				isSubmitting={isLoading}
 				big={big}
+				errorMessage={
+					isErrorWithMessage(result.error)
+						? result.error.data.message
+						: undefined
+				}
 			/>
 			<Button type={'submit'}>submit</Button>
 		</BaseForm>
 	);
 };
 
-export default UploadFileForm;
+export default UploadForm;

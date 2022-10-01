@@ -1,13 +1,12 @@
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { ChangeEvent, useEffect, useRef, useState, DragEvent } from 'react';
-import { CloudUploadIcon, DocumentRemoveIcon } from '@heroicons/react/outline';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { CloudUploadIcon } from '@heroicons/react/outline';
 import { assignRefs } from 'utils/helpers/assignRef';
 import clsx from 'clsx';
 import ValidationError from 'components/_layout/ValidationError';
-import RoundButton from 'components/_ui/_buttons/RoundButton';
-import prettyBytes from 'pretty-bytes';
-import File from 'components/FileList/components/File';
-import Spinner from 'components/_ui/_loaders/Spinner';
+import Spinner from 'components/_ui/Spinner';
+import File from 'components/_forms/_fields/FileInput/File';
+import { v4 as uuid } from 'uuid';
 
 interface FileInputFieldProps<TForm> {
 	name: FieldPath<TForm>;
@@ -21,37 +20,35 @@ const FileInputField = <TForm,>({
 	name,
 	isSubmitting,
 	big,
+	errorMessage,
 	...props
 }: FileInputFieldProps<TForm>) => {
-	const [val, setVal] = useState<File[]>([]);
+	const [files, setFiles] = useState<File[]>([]);
 	const [isDragging, setIsDragging] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const {
-		control,
-		resetField,
-		formState: { errors },
-	} = useFormContext();
+
+	const { control, resetField } = useFormContext();
+
 	const {
 		field: { onChange, ref, onBlur },
 	} = useController({ name, control });
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const files = e.target.files;
-		if (!files) return;
-		setVal(Object.values(files));
-		onChange(Object.values(files));
+		const targetFiles = e.target.files;
+		if (!targetFiles) return;
+
+		setFiles(Object.values(targetFiles));
+		onChange(Object.values(targetFiles));
 	};
 
-	const removeFile = (file: File) => () => {
-		const newList = [...val];
+	const removeFile = (file: File) => {
+		const newList = [...files];
 		const dt = new DataTransfer();
 
 		newList.splice(newList.indexOf(file), 1);
-		newList.forEach((val) => dt.items.add(val));
+		newList.forEach((file) => dt.items.add(file));
 
-		console.log(newList);
-
-		setVal(newList);
+		setFiles(newList);
 		inputRef.current!.files = dt.files;
 	};
 
@@ -62,7 +59,7 @@ const FileInputField = <TForm,>({
 	useEffect(() => {
 		if (isSubmitting) {
 			resetField(name);
-			setVal([]);
+			setFiles([]);
 		}
 	}, [isSubmitting]);
 
@@ -85,7 +82,7 @@ const FileInputField = <TForm,>({
 				</span>
 				{isSubmitting ? (
 					<Spinner
-						size="2xl"
+						size="xl"
 						className="mx-auto mt-4 border-blue-700 dark:border-gray-200"
 					/>
 				) : (
@@ -101,23 +98,18 @@ const FileInputField = <TForm,>({
 				/>
 			</div>
 			<div className="my-4 max-h-48 overflow-y-scroll">
-				{val.map((file) => (
-					<div className="text-bases flex w-full items-center justify-between px-4 py-2 md:text-lg">
-						<div className="flex flex-col">
-							<span className="">{file.name}</span>
-							<span>{prettyBytes(file.size)}</span>
-						</div>
-						<RoundButton
-							size={big ? 'md' : 'sm'}
-							type="button"
-							onClick={removeFile(file)}
-						>
-							<DocumentRemoveIcon className="text-red-600 md:hover:text-red-500" />
-						</RoundButton>
-					</div>
+				{files.map((file) => (
+					<File
+						key={uuid()}
+						removeFile={removeFile}
+						file={file}
+						big={big}
+					/>
 				))}
 			</div>
-			<ValidationError />
+			{errorMessage && (
+				<ValidationError big={big} message={errorMessage} />
+			)}
 		</>
 	);
 };

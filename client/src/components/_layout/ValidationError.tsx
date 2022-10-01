@@ -11,8 +11,8 @@ const ValidationError = ({ message, big, className }: ValidationErrorProps) => {
 		<div className={clsx('flex items-center', className)}>
 			<span
 				className={clsx(
-					'inline-block pt-2 pb-1 text-red-600',
-					big ? 'min-h-8 text-lg' : 'min-h-6 text-sm'
+					'inline-block pt-1 pb-1 text-red-600',
+					big ? 'min-h-6 text-base' : 'min-h-5 text-sm'
 				)}
 			>
 				{message || '\u200b'}

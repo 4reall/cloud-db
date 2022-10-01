@@ -1,28 +1,17 @@
-import { IDir, IFile } from 'types/file/File';
+import { IDir, IFile, IFileBase } from 'types/file/File';
 import clsx from 'clsx';
-import {
-	CogIcon,
-	FolderAddIcon,
-	FolderIcon,
-	DocumentIcon,
-	DotsVerticalIcon,
-} from '@heroicons/react/outline';
 import Divider from 'components/_layout/Divider';
-import { ComponentPropsWithoutRef, MouseEvent } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 import prettyBytes from 'pretty-bytes';
-import FileDropdown from 'components/FileList/components/FileDropdown';
+import { IFileConfig } from 'types/FileConfig';
+import { FileConfig } from 'utils/constants/fileConfig';
 
 interface FileProps extends ComponentPropsWithoutRef<'div'> {
-	file: Pick<IFile, 'type' | 'size' | 'name' | 'date' | '_id'>;
-	// onOptionClick: () => void;
+	file: IFileBase & Partial<Pick<IFile, 'date'>>;
 }
 
-const File = ({ file, className, ...props }: FileProps) => {
-	const { type, size, name, date, _id } = file;
-
-	// const onClick = (e: MouseEvent<HTMLDivElement>) => {
-	// 	if (type === 'dir') handleFolderClick(e, { name, _id });
-	// };
+const File = ({ file, className, children, ...props }: FileProps) => {
+	const { type, size, name, date } = file;
 
 	return (
 		<div
@@ -34,14 +23,11 @@ const File = ({ file, className, ...props }: FileProps) => {
 				'text-sm md:text-base md:hover:bg-gray-100 md:hover:dark:bg-opacity-70',
 				className
 			)}
-			// onClick={onClick}
 		>
-			{type === 'dir' ? (
-				<FolderIcon className="h-full w-full" />
-			) : (
-				<DocumentIcon className="h-full w-full" />
-			)}
-			<span className="col-start-2 col-end-8 ml-3 inline-block overflow-x-hidden md:col-end-7">
+			{type in FileConfig
+				? FileConfig[type as keyof IFileConfig]
+				: FileConfig.defaultFile}
+			<span className="col-start-2 col-end-8 ml-3 inline-block overflow-x-hidden truncate md:col-end-7">
 				{name}
 			</span>
 			<div className="col-start-7 col-end-10 mx-auto hidden h-full w-full items-center justify-between md:flex">

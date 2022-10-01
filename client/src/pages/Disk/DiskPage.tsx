@@ -22,6 +22,7 @@ import useMediaQuery from 'hooks/useMediaQuery';
 import { queries } from 'utils/constants/queries';
 import Header from 'pages/Disk/components/Header';
 import UploadFileModal from 'components/_ui/_modals/UploadFile.modal';
+import SearchPanel from 'pages/Disk/components/SearchPanel';
 
 const DiskPage = () => {
 	const isMd = useMediaQuery(queries.up.md);
@@ -62,10 +63,8 @@ const DiskPage = () => {
 	};
 
 	const handleFolderClick = (e: MouseEvent<HTMLDivElement>, dir: IDir) => {
-		// if (e.target === e.currentTarget) {
 		dispatch(setCurrentDir(dir));
 		dispatch(pushToStack(dir));
-		// }
 	};
 
 	return (
@@ -78,6 +77,8 @@ const DiskPage = () => {
 				openAddFolderModal={openAddFolderModal}
 				openUploadFileModal={openUploadFileModal}
 			/>
+			<Divider className="my-2" align="horizontal" />
+			<SearchPanel />
 			<Divider className="my-2" align="horizontal" />
 			{data && (
 				<FileList

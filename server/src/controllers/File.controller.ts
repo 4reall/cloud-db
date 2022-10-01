@@ -1,18 +1,16 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import fs from "fs";
-import { HydratedDocument } from "mongoose";
 
 import { File } from "../models/File.model";
 import { User } from "../models/User.model";
 import FileService from "../services/File.service";
 import { IBaseRequest } from "../types/BaseRequest";
-import { IFile } from "../types/File";
-import { IFileQueries, FileRequest } from "../types/FileRequest";
-import { IUser } from "../types/User";
+import { FileRequestBody, IFileQueries } from "../types/FileRequestBody";
 import { FILES_PATH } from "../utils/constants/env";
+import { SortOptions } from "../utils/constants/SortOptions";
 
 class FileController {
-	async createDir(req: IBaseRequest<FileRequest>, res: Response) {
+	async createDir(req: IBaseRequest<FileRequestBody>, res: Response) {
 		try {
 			const { parentId, type, name } = req.body;
 
@@ -43,13 +41,40 @@ class FileController {
 		}
 	}
 
-	async getFiles(req: IBaseRequest<null, IFileQueries>, res: Response) {
+	async getFiles(req: IBaseRequest<{}, IFileQueries>, res: Response) {
 		try {
-			const files = await File.find({
-				userId: req.user._id,
-				parentId: req.query.parentId,
-			});
-			console.log(files);
+			const { sortBy, order } = req.query;
+			let files = null;
+
+			const validOrder = order === -1 || order === 1 ? order : 1;
+
+			switch (sortBy) {
+				case SortOptions.Name:
+					files = await File.find({
+						userId: req.user._id,
+						parentId: req.query.parentId,
+					}).sort({ name: validOrder });
+					break;
+				case SortOptions.Type:
+					files = await File.find({
+						userId: req.user._id,
+						parentId: req.query.parentId,
+					}).sort({ type: validOrder });
+					break;
+				case SortOptions.Size:
+					files = await File.find({
+						userId: req.user._id,
+						parentId: req.query.parentId,
+					}).sort({ size: validOrder });
+					break;
+				default:
+					files = await File.find({
+						userId: req.user._id,
+						parentId: req.query.parentId,
+					});
+					break;
+			}
+
 			return res.json(files);
 		} catch (e) {
 			console.log(e);
@@ -57,7 +82,7 @@ class FileController {
 		}
 	}
 
-	async uploadFile(req: IBaseRequest<FileRequest>, res: Response) {
+	async uploadFile(req: IBaseRequest<FileRequestBody>, res: Response) {
 		try {
 			const file = req.files.file;
 
@@ -76,7 +101,6 @@ class FileController {
 			});
 
 			if (user.diskSpace < file.size + user.usedSpace) {
-				console.log(file.size, user.usedSpace, user.diskSpace);
 				return res
 					.status(400)
 					.json({ message: "Not enough space on disk" });
@@ -131,8 +155,6 @@ class FileController {
 				userId: req.user._id,
 			});
 			const path = `${FILES_PATH}/${req.user._id}/${file.path}`;
-
-			console.log(path);
 
 			if (fs.existsSync(path)) {
 				return res.download(path, file.name);

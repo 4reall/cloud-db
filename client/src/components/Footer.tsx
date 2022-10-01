@@ -1,12 +1,8 @@
-import Container from 'components/Container';
-import RoundButton from 'components/_ui/_buttons/RoundButton';
+import Container from 'components/_layout/Container';
 
 import { ReactComponent as GithubIcon } from 'assets/icons/Github.svg';
 import { ReactComponent as Telegram } from 'assets/icons/Telegram.svg';
 import clsx from 'clsx';
-import useMediaQuery from 'hooks/useMediaQuery';
-import { queries } from 'utils/constants/queries';
-import { Link } from 'react-router-dom';
 import SocialLink from 'components/_ui/SocialLink';
 import { MailIcon } from '@heroicons/react/solid';
 import Divider from 'components/_layout/Divider';
@@ -50,7 +46,7 @@ const Footer = () => {
 					align="horizontal"
 					className="mt-3 mb-2 w-44"
 				/>
-				<span className="text-sm font-thin italic dark:text-gray-200 md:text-base md:hover:text-opacity-80 md:dark:hover:text-white">
+				<span className="text-sm font-thin italic dark:text-gray-200 md:text-base">
 					© Created by 4reall
 				</span>
 			</Container>

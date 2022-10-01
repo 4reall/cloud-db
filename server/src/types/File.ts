@@ -1,4 +1,5 @@
 import { ObjectId, Document, Model } from "mongoose";
+import { FileConfig } from "./FileConfig";
 
 export interface IFile {
 	_id: ObjectId;

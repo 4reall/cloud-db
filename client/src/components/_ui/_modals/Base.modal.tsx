@@ -34,7 +34,7 @@ const BaseModal = ({ children, modal, toggleModal }: BaseModalProps) => {
 		>
 			<div
 				className={clsx(
-					'w-60 w-[50%] min-w-[15rem] rounded-md p-8 shadow-md',
+					'w-[80%] rounded-md p-8 shadow-md md:w-[50%]',
 					'relative bg-white dark:bg-gray-600 dark:text-gray-200'
 				)}
 			>

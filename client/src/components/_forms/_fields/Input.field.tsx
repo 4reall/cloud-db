@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { FieldPath, useFormContext } from 'react-hook-form';
 import ValidationError from 'components/_layout/ValidationError';
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
+import Input from 'components/_ui/Input';
 
 interface InputFieldProps<TForm> extends ComponentPropsWithoutRef<'input'> {
 	name: FieldPath<TForm>;
@@ -37,17 +38,13 @@ const InputField = <IForm,>({
 			>
 				{label}
 			</label>
-			<input
+			<Input
 				{...props}
 				{...register(name)}
-				className={clsx(
-					'w-full appearance-none overflow-hidden outline-none',
-					'rounded-lg border-transparent bg-gray-100 py-2 px-4',
-					'text-gray-600 focus:outline-none focus:ring-blue-700',
-					big ? 'mt-3 text-xl ring-4' : 'mt-1 ring-2',
-					errorMessage ? 'ring-red-500' : 'ring-gray-400'
-				)}
+				isError={!!(errorMessage || error)}
+				size={big ? 'md' : 'sm'}
 				id={name}
+				full
 			/>
 			{validation && (
 				<ValidationError message={errorMessage || error} big={big} />
